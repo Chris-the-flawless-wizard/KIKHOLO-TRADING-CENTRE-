@@ -1,1 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeHub Online Trading Centre</title>
 
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+<body>
+
+<header>
+
+<div class="logo">
+    <h2>TradeHub</h2>
+</div>
+
+<nav>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#shops">Shops</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
+
+</header>
+
+<section class="hero" id="home">
+
+<div class="hero-content">
+
+<h1>Welcome To TradeHub</h1>
+
+<p>
+Discover shops, restaurants, pharmacies,
+electronics stores and more.
+</p>
+
+<button onclick="visit()">Explore Businesses</button>
+
+</div>
+
+</section>
+
+<section class="search-section">
+
+<h2>Search Businesses</h2>
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search business..."
+onkeyup="searchBusiness()">
+
+</section>
+
+<section class="shops" id="shops">
+
+<h2>Featured Shops</h2>
+
+<div class="shop-container">
+
+<div class="shop-card">
+<img src="images/shop1.jpg">
+<h3>Electronics Shop</h3>
+<p>Phones, TVs and Computers</p>
+</div>
+
+<div class="shop-card">
+<img src="images/shop2.jpg">
+<h3>Supermarket</h3>
+<p>Food and Household Products</p>
+</div>
+
+<div class="shop-card">
+<img src="images/shop3.jpg">
+<h3>Pharmacy</h3>
+<p>Health and Medical Services</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="services">
+
+<h2>Services</h2>
+
+<div class="services">
+
+<div class="service">
+<i class="fa-solid fa-building-columns"></i>
+<h3>Banking</h3>
+</div>
+
+<div class="service">
+<i class="fa-solid fa-mobile-screen"></i>
+<h3>Mobile Money</h3>
+</div>
+
+<div class="service">
+<i class="fa-solid fa-utensils"></i>
+<h3>Restaurants</h3>
+</div>
+
+<div class="service">
+<i class="fa-solid fa-scissors"></i>
+<h3>Salons</h3>
+</div>
+
+</div>
+
+</section>
+
+<section id="gallery">
+
+<h2>Gallery</h2>
+
+<div class="gallery">
+
+<img src="images/shop1.jpg">
+<img src="images/shop2.jpg">
+<img src="images/shop3.jpg">
+
+</div>
+
+</section>
+
+<section id="contact">
+
+<h2>Contact Us</h2>
+
+<form>
+
+<input type="text" placeholder="Your Name">
+
+<input type="email" placeholder="Your Email">
+
+<textarea placeholder="Message"></textarea>
+
+<button type="submit">Send Message</button>
+
+</form>
+
+</section>
+
+<footer>
+
+<p>© 2026 TradeHub Online Trading Centre</p>
+
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
