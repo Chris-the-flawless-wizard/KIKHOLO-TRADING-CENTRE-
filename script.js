@@ -1,12 +1,18 @@
 function visit(){
-    alert("Welcome to TradeHub Online Trading Centre!");
+
+alert(
+"Welcome to CHRIS' KIKHOLO TRADING HUB!"
+);
+
 }
 
 function searchBusiness(){
 
 let input =
-document.getElementById("searchInput")
-.value.toLowerCase();
+document
+.getElementById("searchInput")
+.value
+.toLowerCase();
 
 let cards =
 document.querySelectorAll(".shop-card");
@@ -17,9 +23,15 @@ let text =
 card.innerText.toLowerCase();
 
 if(text.includes(input)){
+
 card.style.display = "block";
-}else{
+
+}
+
+else{
+
 card.style.display = "none";
+
 }
 
 });
