@@ -1,30 +1,4 @@
 *{
-    background: linear-gradient(
-        -45deg,
-        #ff0080,
-        #7928ca,
-        #0070f3,
-        #00dfd8,
-        #f5af19,
-        #ff0080
-    );
-
-    background-size:600% 600%;
-    animation:gradientMove 12s ease infinite;
-}
-
-@keyframes gradientMove{
-    0%{
-        background-position:0% 50%;
-    }
-    50%{
-        background-position:100% 50%;
-    }
-    100%{
-        background-position:0% 50%;
-    }
-
-{
 margin:0;
 padding:0;
 box-sizing:border-box;
