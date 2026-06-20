@@ -1,337 +1,162 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,sans-serif;
-}
-
-/* Animated Gradient Background */
-body{
-color:white;
-overflow-x:hidden;
-
-background:linear-gradient(
--45deg,
-#ff0080,
-#7928ca,
-#0070f3,
-#00dfd8,
-#f5af19,
-#ff0080
-);
-
-background-size:600% 600%;
-animation:gradientMove 15s ease infinite;
-}
-
-@keyframes gradientMove{
-0%{
-background-position:0% 50%;
-}
-50%{
-background-position:100% 50%;
-}
-100%{
-background-position:0% 50%;
-}
-}
-
-/* Header */
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 8%;
-
-background:rgba(255,255,255,0.08);
-backdrop-filter:blur(15px);
--webkit-backdrop-filter:blur(15px);
-
-position:sticky;
-top:0;
-z-index:100;
-
-border-bottom:1px solid rgba(255,255,255,0.1);
-}
-
-/* Navigation */
-nav ul{
-display:flex;
-list-style:none;
-}
-
-nav ul li{
-margin-left:25px;
-}
-
-nav ul li a{
-color:white;
-text-decoration:none;
-font-weight:bold;
-transition:.3s;
-}
-
-nav ul li a:hover{
-color:#ffd700;
-text-shadow:0 0 15px #ffd700;
-}
-
-/* Hero Section */
-.hero{
-height:100vh;
-
-background:
-linear-gradient(
-rgba(0,0,0,.55),
-rgba(0,0,0,.55)
-),
-url("images/hero.jpg");
-
-background-size:cover;
-background-position:center;
-
-display:flex;
-justify-content:center;
-align-items:center;
-text-align:center;
-}
-
-.hero-content h1{
-font-size:70px;
-margin-bottom:20px;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeHub Online Trading Centre</title>
 
-text-shadow:
-0 0 15px rgba(255,255,255,.5),
-0 0 25px rgba(255,255,255,.3);
-}
+<link rel="stylesheet" href="style.css">
 
-.hero-content p{
-font-size:22px;
-margin:20px 0;
-}
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-/* Buttons */
-.hero button,
-form button{
+</head>
+<body>
 
-padding:15px 35px;
-font-size:18px;
+<header>
 
-border:none;
-border-radius:50px;
+<div class="logo">
+    <h2>TradeHub</h2>
+</div>
 
-cursor:pointer;
+<nav>
+    <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#shops">Shops</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
 
-background:linear-gradient(
-45deg,
-#ff0080,
-#0070f3
-);
+</header>
 
-color:white;
-font-weight:bold;
+<section class="hero" id="home">
 
-transition:.4s;
-}
+<div class="hero-content">
 
-.hero button:hover,
-form button:hover{
+<h1>Welcome To TradeHub</h1>
 
-transform:translateY(-5px);
+<p>
+Discover shops, restaurants, pharmacies,
+electronics stores and more.
+</p>
 
-box-shadow:
-0 10px 30px rgba(0,112,243,.5),
-0 10px 30px rgba(255,0,128,.5);
-}
+<button onclick="visit()">Explore Businesses</button>
 
-/* Search Section */
-.search-section{
-padding:60px;
-text-align:center;
-}
+</div>
 
-.search-section input{
-width:60%;
-padding:15px;
+</section>
 
-border:none;
-border-radius:15px;
+<section class="search-section">
 
-background:rgba(255,255,255,0.12);
-backdrop-filter:blur(10px);
-
-color:white;
-font-size:16px;
-}
-
-.search-section input::placeholder{
-color:#ddd;
-}
-
-/* Shops */
-.shops{
-padding:80px 10%;
-}
-
-.shop-container{
-display:flex;
-gap:30px;
-flex-wrap:wrap;
-justify-content:center;
-}
-
-/* Shop Cards */
-.shop-card{
-background:rgba(255,255,255,0.1);
-
-backdrop-filter:blur(20px);
--webkit-backdrop-filter:blur(20px);
-
-width:300px;
-
-border-radius:25px;
-overflow:hidden;
-
-border:1px solid rgba(255,255,255,0.15);
-
-transition:.4s;
-}
-
-.shop-card:hover{
-transform:
-translateY(-15px)
-scale(1.04);
+<h2>Search Businesses</h2>
 
-box-shadow:
-0 15px 40px rgba(0,0,0,.4);
-}
+<input
+type="text"
+id="searchInput"
+placeholder="Search business..."
+onkeyup="searchBusiness()">
 
-.shop-card img{
-width:100%;
-height:220px;
-object-fit:cover;
-}
+</section>
 
-.shop-card h3{
-padding:15px;
-}
+<section class="shops" id="shops">
 
-.shop-card p{
-padding:0 15px 15px;
-}
+<h2>Featured Shops</h2>
 
-/* Services */
-#services{
-padding:80px 10%;
-text-align:center;
-}
+<div class="shop-container">
 
-.services{
-display:flex;
-justify-content:center;
-gap:40px;
-flex-wrap:wrap;
-}
+<div class="shop-card">
+<img src="images/shop1.jpg">
+<h3>Electronics Shop</h3>
+<p>Phones, TVs and Computers</p>
+</div>
 
-.service{
-background:rgba(255,255,255,0.1);
-
-backdrop-filter:blur(20px);
-
-padding:40px;
-border-radius:25px;
-width:220px;
-
-transition:.4s;
-}
-
-.service:hover{
-transform:translateY(-10px);
-}
-
-.service i{
-font-size:50px;
-margin-bottom:15px;
-}
-
-/* Gallery */
-.gallery{
-display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(300px,1fr));
-
-gap:20px;
-padding:50px;
-}
-
-.gallery img{
-width:100%;
-border-radius:20px;
-transition:.4s;
-}
-
-.gallery img:hover{
-transform:scale(1.05);
-}
-
-/* Contact Section */
-#contact{
-padding:80px;
-}
-
-form{
-max-width:600px;
-margin:auto;
-display:flex;
-flex-direction:column;
-}
-
-form input,
-form textarea{
-
-padding:15px;
-margin-bottom:20px;
-
-border:none;
-border-radius:15px;
-
-background:rgba(255,255,255,0.12);
-
-backdrop-filter:blur(10px);
-
-color:white;
-}
-
-form input::placeholder,
-form textarea::placeholder{
-color:#ddd;
-}
-
-/* Footer */
-footer{
-background:rgba(255,255,255,0.08);
-
-backdrop-filter:blur(15px);
-
-padding:20px;
-text-align:center;
-
-border-top:1px solid rgba(255,255,255,.1);
-}
-
-/* Scrollbar */
-::-webkit-scrollbar{
-width:10px;
-}
-
-::-webkit-scrollbar-track{
-background:#111;
-}
-
-::-webkit-scrollbar-thumb{
-background:linear-gradient(
-#ff0080,
-#0070f3
-);
-border-radius:10px;
-}
+<div class="shop-card">
+<img src="images/shop2.jpg">
+<h3>Supermarket</h3>
+<p>Food and Household Products</p>
+</div>
+
+<div class="shop-card">
+<img src="images/shop3.jpg">
+<h3>Pharmacy</h3>
+<p>Health and Medical Services</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="services">
+
+<h2>Services</h2>
+
+<div class="services">
+
+<div class="service">
+<i class="fa-solid fa-building-columns"></i>
+<h3>Banking</h3>
+</div>
+
+<div class="service">
+<i class="fa-solid fa-mobile-screen"></i>
+<h3>Mobile Money</h3>
+</div>
+
+<div class="service">
+<i class="fa-solid fa-utensils"></i>
+<h3>Restaurants</h3>
+</div>
+
+<div class="service">
+<i class="fa-solid fa-scissors"></i>
+<h3>Salons</h3>
+</div>
+
+</div>
+
+</section>
+
+<section id="gallery">
+
+<h2>Gallery</h2>
+
+<div class="gallery">
+
+<img src="images/shop1.jpg">
+<img src="images/shop2.jpg">
+<img src="images/shop3.jpg">
+
+</div>
+
+</section>
+
+<section id="contact">
+
+<h2>Contact Us</h2>
+
+<form>
+
+<input type="text" placeholder="Your Name">
+
+<input type="email" placeholder="Your Email">
+
+<textarea placeholder="Message"></textarea>
+
+<button type="submit">Send Message</button>
+
+</form>
+
+</section>
+
+<footer>
+
+<p>© 2026 TradeHub Online Trading Centre</p>
+
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
