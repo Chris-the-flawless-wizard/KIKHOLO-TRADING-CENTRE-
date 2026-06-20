@@ -1,4 +1,13 @@
+CHRIS-KIKHOLO-TRADING-HUB
+│
 ├── index.html
 ├── style.css
 ├── script.js
-├── images/
+│
+└── images
+    ├── shop.jpg
+    ├── phone.jpg
+    ├── computer.jpg
+    ├── restaurant.jpg
+    ├── pharmacy.jpg
+    └── supermarket.jpg
