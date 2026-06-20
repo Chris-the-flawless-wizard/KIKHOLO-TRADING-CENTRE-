@@ -1,5 +1,6 @@
-images/
- ├── Electronics.jpg
- ├── supermarket.jpg
- ├── Restaurant.jpg
- └── pharmacy.jpg
+images
+│
+├── Electronics shop.jpg
+├── supermarket.jpg
+├── pharmacy.jpg
+└── Restuarant.jpg
