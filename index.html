@@ -1,253 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>CHRIS' KIKHOLO TRADING HUB</title>
-
-<link rel="stylesheet" href="style.css">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHRIS' KIKHOLO TRADING HUB</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<!-- Header -->
 <header>
 
-<div class="logo">
-<h2>CHRIS' KIKHOLO TRADING HUB</h2>
-</div>
+    <h2>CHRIS' KIKHOLO TRADING HUB</h2>
 
-<nav>
-
-<ul>
-
-<li><a href="#home">Home</a></li>
-
-<li><a href="#shops">Businesses</a></li>
-
-<li><a href="#services">Services</a></li>
-
-<li><a href="#gallery">Gallery</a></li>
-
-<li><a href="#contact">Contact</a></li>
-
-</ul>
-
-</nav>
+    <nav>
+        <ul>
+            <li><a href="#business">Business</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
 
 </header>
 
-<section class="hero" id="home">
 
-<div class="hero-content">
+<!-- Home Section (Keep your existing Home code here) -->
+<section class="hero">
 
-<h1>CHRIS' KIKHOLO TRADING HUB</h1>
+    <div class="hero-content">
 
-<p>
-Connecting businesses, customers and opportunities
-within the Kikholo community.
-</p>
+        <h1>CHRIS' KIKHOLO TRADING HUB</h1>
 
-<button onclick="visit()">
-Explore Businesses
-</button>
+        <p>
+            Quality Electronics and Reliable Services
+        </p>
 
-</div>
+        <button>
+            Explore More
+        </button>
 
-</section>
-
-<section class="search-section">
-
-<h2>Search Businesses</h2>
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search for a business..."
-onkeyup="searchBusiness()">
+    </div>
 
 </section>
 
-<section class="shops" id="shops">
 
-<h2>Featured Businesses</h2>
 
-<div class="shop-container">
+<!-- Business Section -->
+<section id="business" class="shops">
 
-<div class="shop-card">
+    <h2>Our Business</h2>
 
-<img src="images/shop1.jpg" alt="">
+    <div class="shop-container">
 
-<h3>Electronics Shop</h3>
+        <div class="shop-card">
+            <img src="images/computer.jpg" alt="Computers">
+            <h3>Computers</h3>
+            <p>High quality computers for home and office use.</p>
+        </div>
 
-<p>
-Phones, Computers, TVs and Accessories
-</p>
 
-</div>
+        <div class="shop-card">
+            <img src="images/tv.jpg" alt="TV Sets">
+            <h3>TV Sets</h3>
+            <p>Modern television sets with excellent picture quality.</p>
+        </div>
 
-<div class="shop-card">
 
-<img src="images/shop2.jpg" alt="">
+        <div class="shop-card">
+            <img src="images/freezer.jpg" alt="Deep Freezers">
+            <h3>Deep Freezers</h3>
+            <p>Reliable cooling equipment for your business and home.</p>
+        </div>
 
-<h3>Supermarket</h3>
 
-<p>
-Food, Drinks and Household Products
-</p>
-
-</div>
-
-<div class="shop-card">
-
-<img src="images/shop3.jpg" alt="">
-
-<h3>Pharmacy</h3>
-
-<p>
-Medical Supplies and Healthcare
-</p>
-
-</div>
-
-<div class="shop-card">
-
-<img src="images/shop4.jpg" alt="">
-
-<h3>Restaurant</h3>
-
-<p>
-Fresh Meals and Refreshments
-</p>
-
-</div>
-
-</div>
+    </div>
 
 </section>
 
+
+
+
+<!-- Services Section -->
 <section id="services">
 
-<h2>Our Services</h2>
+    <h2>Our Services</h2>
 
-<div class="services">
+    <div class="services">
 
-<div class="service">
+        <div class="service">
+            <h3>Sales</h3>
+            <p>We sell quality electronics at affordable prices.</p>
+        </div>
 
-<i class="fa-solid fa-building-columns"></i>
 
-<h3>Banking</h3>
+        <div class="service">
+            <h3>Repair</h3>
+            <p>Professional repair and maintenance services.</p>
+        </div>
 
-</div>
 
-<div class="service">
+        <div class="service">
+            <h3>Delivery</h3>
+            <p>Fast and reliable product delivery.</p>
+        </div>
 
-<i class="fa-solid fa-mobile-screen-button"></i>
-
-<h3>Mobile Money</h3>
-
-</div>
-
-<div class="service">
-
-<i class="fa-solid fa-utensils"></i>
-
-<h3>Restaurants</h3>
-
-</div>
-
-<div class="service">
-
-<i class="fa-solid fa-scissors"></i>
-
-<h3>Salons</h3>
-
-</div>
-
-<div class="service">
-
-<i class="fa-solid fa-wifi"></i>
-
-<h3>Internet Services</h3>
-
-</div>
-
-<div class="service">
-
-<i class="fa-solid fa-truck"></i>
-
-<h3>Transport</h3>
-
-</div>
-
-</div>
+    </div>
 
 </section>
 
+
+
+
+<!-- Gallery Section -->
 <section id="gallery">
 
-<h2>Gallery</h2>
+    <h2>Gallery</h2>
 
-<div class="gallery">
+    <div class="gallery">
 
-<img src="images/shop1.jpg">
+        <img src="images/computer.jpg" alt="Product 1">
 
-<img src="images/shop2.jpg">
+        <img src="images/tv.jpg" alt="Product 2">
 
-<img src="images/shop3.jpg">
+        <img src="images/freezer.jpg" alt="Product 3">
 
-<img src="images/shop4.jpg">
-
-<img src="images/shop5.jpg">
-
-<img src="images/shop6.jpg">
-
-</div>
+    </div>
 
 </section>
 
+
+
+
+<!-- Contact Section -->
 <section id="contact">
 
-<h2>Contact Us</h2>
+    <h2>Contact Us</h2>
 
-<form>
+    <form>
 
-<input
-type="text"
-placeholder="Full Name"
-required>
+        <input type="text" placeholder="Your Name">
 
-<input
-type="email"
-placeholder="Email Address"
-required>
+        <input type="email" placeholder="Your Email">
 
-<textarea
-rows="6"
-placeholder="Write your message..."
-required></textarea>
+        <textarea placeholder="Your Message"></textarea>
 
-<button type="submit">
-Send Message
-</button>
+        <button type="submit">
+            Send Message
+        </button>
 
-</form>
+    </form>
 
 </section>
 
+
+
+
+<!-- Footer -->
 <footer>
 
-<p>
-© 2026 CHRIS' KIKHOLO TRADING HUB
-</p>
+    <p>
+        © 2026 CHRIS' KIKHOLO TRADING HUB. All Rights Reserved.
+    </p>
 
 </footer>
+
 
 <script src="script.js"></script>
 
