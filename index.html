@@ -1,164 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-<title>Stores - CHRIS' KIKHOLO TRADING HUB</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="css/style.css">
+<title>CHRIS' KIKHOLO TRADING HUB</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
-
 <body>
-
 
 <header>
 
 <div class="logo">
-CHRIS' KIKHOLO TRADING HUB
+<h2>CHRIS' KIKHOLO TRADING HUB</h2>
 </div>
-
 
 <nav>
 
-<a href="index.html">Home</a>
-<a href="stores.html">Stores</a>
-<a href="categories.html">Categories</a>
-<a href="login.html">Login</a>
+<ul>
+
+<li><a href="#home">Home</a></li>
+
+<li><a href="#shops">Businesses</a></li>
+
+<li><a href="#services">Services</a></li>
+
+<li><a href="#gallery">Gallery</a></li>
+
+<li><a href="#contact">Contact</a></li>
+
+</ul>
 
 </nav>
 
 </header>
 
 
+<section class="hero" id="home">
+
+<div class="hero-content">
+
+<h1>CHRIS' KIKHOLO TRADING HUB</h1>
+
+<p>
+Connecting businesses, customers and opportunities
+within the Kikholo community.
+</p>
+
+<button onclick="document.getElementById('shops').scrollIntoView({behavior:'smooth'})">
+    Explore Businesses
+</button>
+
+</div>
+
+</section>
 
 
-<section class="page-title">
+<section class="search-section">
 
-<h1>Featured Businesses</h1>
+<h2>Search Businesses</h2>
 
-<p>Visit your favourite store and shop easily</p>
+<input
+type="text"
+id="searchInput"
+placeholder="Search for a business..."
+onkeyup="searchBusiness()">
 
 </section>
 
 
 
+<section class="shops" id="shops">
+    <h2>Featured Businesses</h2>
 
+    <div class="shop-container">
 
-<section class="store-container">
+        <!-- Electronics -->
+        <div class="shop-card">
+            <img src="images/electronics.jpg" alt="Electronics">
+            <h3>Electronics</h3>
+            <p>TVs, Radios, Home Theatres, Refrigerators, Speakers and other electronic appliances.</p>
+            <button>Visit Store</button>
+        </div>
 
+        <!-- Phones -->
+        <div class="shop-card">
+            <img src="images/phones.jpg" alt="Phones">
+            <h3>Phones</h3>
+            <p>Smartphones, Accessories, Repairs and Mobile Services.</p>
+            <button>Visit Store</button>
+        </div>
 
+        <!-- Computers -->
+        <div class="shop-card">
+            <img src="images/computers.jpg" alt="Computers">
+            <h3>Computers</h3>
+            <p>Laptops, Desktops, Printers, Networking and Accessories.</p>
+            <button>Visit Store</button>
+        </div>
 
-<div class="store-card">
+        <!-- Furniture -->
+        <div class="shop-card">
+            <img src="images/furniture.jpg" alt="Furniture">
+            <h3>Furniture</h3>
+            <p>Office, Home, School and Hotel Furniture.</p>
+            <button>Visit Store</button>
+        </div>
 
-<img src="images/electronics.jpg">
+        <!-- Hardware -->
+        <div class="shop-card">
+            <img src="images/hardware.jpg" alt="Hardware">
+            <h3>Hardware</h3>
+            <p>Building Materials, Paints, Tools and Construction Supplies.</p>
+            <button>Visit Store</button>
+        </div>
 
-<div class="content">
+        <!-- Fashion -->
+        <div class="shop-card">
+            <img src="images/fashion.jpg" alt="Fashion">
+            <h3>Fashion</h3>
+            <p>Clothes, Shoes, Bags, Jewellery and Fashion Accessories.</p>
+            <button>Visit Store</button>
+        </div>
 
-<h3>Electronics Store</h3>
+        <!-- Transport -->
+        <div class="shop-card">
+            <img src="images/transport.jpg" alt="Transport">
+            <h3>Transport</h3>
+            <p>Taxi Services, Vehicle Hire, Delivery and Logistics.</p>
+            <button>Visit Store</button>
+        </div>
 
-<p>
-TVs, radios, speakers, refrigerators and home appliances.
-</p>
+        <!-- Retail Shop -->
+        <div class="shop-card">
+            <img src="images/shop.jpg" alt="Retail Shop">
+            <h3>Retail Shop</h3>
+            <p>Household Goods, Stationery, Kitchenware and Everyday Essentials.</p>
+            <button>Visit Store</button>
+        </div>
 
-<a class="btn" href="store-details.html">
-Visit Store
-</a>
-
-</div>
-
-</div>
-
-
-
-
-<div class="store-card">
-
-<img src="images/phones.jpg">
-
-<div class="content">
-
-<h3>Phone Hub</h3>
-
-<p>
-Smartphones, accessories and phone repairs.
-</p>
-
-<a class="btn" href="store-details.html">
-Visit Store
-</a>
-
-</div>
-
-</div>
-
-
-
-
-<div class="store-card">
-
-<img src="images/computers.jpg">
-
-<div class="content">
-
-<h3>Computer World</h3>
-
-<p>
-Laptops, desktops and computer accessories.
-</p>
-
-<a class="btn" href="store-details.html">
-Visit Store
-</a>
-
-</div>
-
-</div>
-
-
-
-
-
-<div class="store-card">
-
-<img src="images/furniture.jpg">
-
-<div class="content">
-
-<h3>Furniture Shop</h3>
-
-<p>
-Modern furniture for homes and offices.
-</p>
-
-<a class="btn" href="store-details.html">
-Visit Store
-</a>
-
-</div>
-
-</div>
-
-
-
-
+    </div>
 </section>
-
-
-
-
-
-<footer>
-
-<p>
-© 2026 CHRIS' KIKHOLO TRADING HUB
-</p>
-
-</footer>
-
-
-
-</body>
-
-</html>
