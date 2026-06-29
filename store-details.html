@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Business Store</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+<h1 id="businessName">
+CHRIS' KIKHOLO TRADING HUB
+</h1>
+
+
+<nav>
+
+<a href="index.html">Home</a>
+
+<a href="stores.html">Stores</a>
+
+<a href="cart.html">Cart</a>
+
+</nav>
+
+
+</header>
+
+
+
+<section class="business-details">
+
+
+<img id="businessImage" src="images/shop.jpg">
+
+
+<h2 id="title">
+Business Store
+</h2>
+
+
+<p id="description">
+Welcome to our store.
+</p>
+
+
+
+<h2>Available Products</h2>
+
+
+
+<div class="products">
+
+
+<div class="product-card">
+
+<img src="images/shop.jpg">
+
+<h3 id="product1">
+Product One
+</h3>
+
+<p>
+Price: UGX 100,000
+</p>
+
+<button onclick="addCart()">
+Add To Cart
+</button>
+
+
+</div>
+
+
+
+<div class="product-card">
+
+<img src="images/shop.jpg">
+
+<h3>
+Product Two
+</h3>
+
+<p>
+Price: UGX 200,000
+</p>
+
+<button onclick="addCart()">
+Add To Cart
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+<script>
+
+
+let store =
+new URLSearchParams(window.location.search)
+.get("store");
+
+
+
+let title =
+document.getElementById("title");
+
+let description =
+document.getElementById("description");
+
+let image =
+document.getElementById("businessImage");
+
+
+
+if(store=="electronics")
+{
+
+title.innerHTML="Kikholo Electronics";
+
+description.innerHTML=
+"Quality electronics including TVs, radios, speakers and home appliances.";
+
+image.src="images/electronics.jpg";
+
+}
+
+
+
+else if(store=="phones")
+{
+
+title.innerHTML="Chris Mobile Phones";
+
+description.innerHTML=
+"Latest smartphones, accessories and phone services.";
+
+image.src="images/phones.jpg";
+
+}
+
+
+
+else if(store=="computers")
+{
+
+title.innerHTML="Kikholo Computers";
+
+description.innerHTML=
+"Laptops, computers, printers and IT accessories.";
+
+image.src="images/computers.jpg";
+
+}
+
+
+
+else if(store=="furniture")
+{
+
+title.innerHTML="Modern Furniture Shop";
+
+description.innerHTML=
+"Beautiful furniture for homes and offices.";
+
+image.src="images/furniture.jpg";
+
+}
+
+
+
+function addCart()
+{
+
+alert("Product added to cart!");
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>
