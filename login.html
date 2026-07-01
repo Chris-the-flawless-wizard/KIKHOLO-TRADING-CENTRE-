@@ -1,1 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login | CHRIS' KIKHOLO TRADING HUB</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,sans-serif;
+}
+
+body{
+background:#f4f6f9;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.login-box{
+width:400px;
+background:white;
+padding:35px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.login-box h2{
+text-align:center;
+margin-bottom:25px;
+color:#003366;
+}
+
+.input-group{
+margin-bottom:20px;
+}
+
+.input-group label{
+display:block;
+margin-bottom:8px;
+font-weight:bold;
+}
+
+.input-group input{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:14px;
+background:#0a7cff;
+color:white;
+border:none;
+border-radius:8px;
+font-size:18px;
+cursor:pointer;
+}
+
+button:hover{
+background:#005fd1;
+}
+
+.links{
+margin-top:20px;
+text-align:center;
+}
+
+.links a{
+text-decoration:none;
+color:#0a7cff;
+font-weight:bold;
+}
+
+.message{
+margin-top:15px;
+text-align:center;
+font-weight:bold;
+display:none;
+}
+
+.success{
+color:green;
+}
+
+.error{
+color:red;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+<h2>User Login</h2>
+
+<form id="loginForm">
+
+<div class="input-group">
+
+<label>Email</label>
+
+<input type="email" id="email" required>
+
+</div>
+
+<div class="input-group">
+
+<label>Password</label>
+
+<input type="password" id="password" required>
+
+</div>
+
+<button type="submit">
+
+Login
+
+</button>
+
+</form>
+
+<div id="message" class="message"></div>
+
+<div class="links">
+
+<p>
+
+Don't have an account?
+
+<a href="register.html">
+
+Register
+
+</a>
+
+</p>
+
+<br>
+
+<p>
+
+Business Owner?
+
+<a href="register-business.html">
+
+Register Business
+
+</a>
+
+</p>
+
+</div>
+
+</div>
+
+<script>
+
+document.getElementById("loginForm").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+let email=document.getElementById("email").value;
+
+let password=document.getElementById("password").value;
+
+let users=JSON.parse(localStorage.getItem("users"))||[];
+
+let found=users.find(function(user){
+
+return user.email===email && user.password===password;
+
+});
+
+let message=document.getElementById("message");
+
+if(found){
+
+message.style.display="block";
+
+message.className="message success";
+
+message.innerHTML="Login Successful...";
+
+setTimeout(function(){
+
+window.location="index.html";
+
+},1500);
+
+}
+
+else{
+
+message.style.display="block";
+
+message.className="message error";
+
+message.innerHTML="Incorrect Email or Password.";
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>
