@@ -91,24 +91,95 @@ border-bottom:1px solid rgba(255,255,255,.14);
 .brand-link{
 display:flex;
 align-items:center;
-gap:10px;
+gap:12px;
 color:white;
 text-decoration:none;
 font-weight:900;
+position:relative;
+padding:7px 14px 7px 7px;
+border-radius:18px;
+transition:transform .35s ease,background .35s ease,box-shadow .35s ease;
+}
+
+.brand-link::after{
+content:"";
+position:absolute;
+inset:-2px;
+border-radius:20px;
+padding:2px;
+background:linear-gradient(90deg,#ff0080,#8b5cf6,#00d9ff,#ff0080);
+background-size:300% 100%;
+animation:brandGlow 5s linear infinite;
+-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+-webkit-mask-composite:xor;
+mask-composite:exclude;
+opacity:.75;
+pointer-events:none;
+}
+
+@keyframes brandGlow{
+0%{background-position:0% 50%}
+100%{background-position:300% 50%}
+}
+
+.brand-link:hover{
+transform:translateY(-2px) scale(1.02);
+background:rgba(255,255,255,.08);
+box-shadow:0 10px 30px rgba(0,0,0,.22),0 0 28px rgba(0,210,255,.18);
 }
 
 .brand-mark{
-width:42px;
-height:42px;
+width:44px;
+height:44px;
 display:grid;
 place-items:center;
-border-radius:14px;
-background:linear-gradient(135deg,#ff0080,#0070f3);
-box-shadow:0 0 24px rgba(0,112,243,.45);
+border-radius:15px;
+background:linear-gradient(135deg,#ff0080,#8b5cf6,#0070f3);
+background-size:200% 200%;
+box-shadow:0 0 25px rgba(0,112,243,.5),inset 0 0 14px rgba(255,255,255,.18);
+animation:brandIcon 4s ease infinite;
+position:relative;
+z-index:1;
 }
 
-.brand-name{font-size:22px;letter-spacing:.5px}
-.brand-name span{color:#63e6ff}
+@keyframes brandIcon{
+0%,100%{background-position:0% 50%;transform:rotate(0deg)}
+50%{background-position:100% 50%;transform:rotate(3deg)}
+}
+
+.brand-name{
+font-size:24px;
+letter-spacing:1.5px;
+font-weight:950;
+position:relative;
+z-index:1;
+background:linear-gradient(90deg,#ffffff,#63e6ff,#ffffff,#ff7ac3);
+background-size:300% 100%;
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent;
+animation:brandText 6s ease infinite;
+text-shadow:none;
+}
+
+.brand-name span{
+background:linear-gradient(90deg,#ff4da6,#8b5cf6,#42e8ff);
+background-size:200% 100%;
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent;
+animation:brandX 4s ease infinite;
+}
+
+@keyframes brandText{
+0%,100%{background-position:0% 50%}
+50%{background-position:100% 50%}
+}
+
+@keyframes brandX{
+0%,100%{background-position:0% 50%}
+50%{background-position:100% 50%}
+}
 
 nav ul{display:flex;list-style:none;gap:10px}
 nav ul li a{
