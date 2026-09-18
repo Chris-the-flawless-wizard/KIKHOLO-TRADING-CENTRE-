@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CHRIS' KIKHOLO TRADING HUB</title>
+<title>CHRISXCHANGE | Connect. Discover. Trade.</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -19,27 +19,29 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <header>
 
-<div class="logo">
-<h2>CHRIS' KIKHOLO TRADING HUB</h2>
+<div class="logo" aria-label="CHRISXCHANGE home">
+<a href="#home" class="brand-link">
+<span class="brand-mark"><i class="fa-solid fa-arrows-rotate"></i></span>
+<span class="brand-name">CHRIS<span>XCHANGE</span></span>
+</a>
 </div>
 
-<nav>
-
+<nav aria-label="Main navigation">
 <ul>
-
-<li><a href="#home">Home</a></li>
-
-<li><a href="#shops">Businesses</a></li>
-
-<li><a href="#services">Services</a></li>
-
-<li><a href="#gallery">Gallery</a></li>
-
-<li><a href="#contact">Contact</a></li>
-
+<li><a href="#home"><i class="fa-solid fa-house"></i> Home</a></li>
+<li><a href="#shops"><i class="fa-solid fa-store"></i> Businesses</a></li>
+<li><a href="#services"><i class="fa-solid fa-layer-group"></i> Services</a></li>
+<li><a href="#gallery"><i class="fa-solid fa-images"></i> Gallery</a></li>
+<li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
 </ul>
-
 </nav>
+
+<div class="header-actions">
+<a class="header-icon" href="index%20html/login.html" aria-label="Log in" title="Log in"><i class="fa-solid fa-user"></i></a>
+<a class="header-signup" href="index%20html/register.html">Sign Up</a>
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark and light mode" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+<button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+</div>
 
 </header>
 
@@ -48,15 +50,15 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <div class="hero-content">
 
-<h1>CHRIS' KIKHOLO TRADING HUB</h1>
+<div class="hero-badge"><i class="fa-solid fa-bolt"></i> THE NEXT-GENERATION MARKETPLACE</div>
+<h1>CHRIS<span>XCHANGE</span></h1>
 
 <p>
-Connecting businesses, customers and opportunities
-within the Kikholo community.
+Connect businesses, customers and opportunities through one modern digital marketplace.
 </p>
 
 <button onclick="document.getElementById('shops').scrollIntoView({behavior:'smooth'})">
-    Explore Businesses
+    Explore Marketplace <i class="fa-solid fa-arrow-right"></i>
 </button>
 
 </div>
