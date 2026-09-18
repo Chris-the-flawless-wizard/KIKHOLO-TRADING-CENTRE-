@@ -11,6 +11,7 @@ overflow-x:hidden;
 background:linear-gradient(-45deg,#ff0080,#7928ca,#0070f3,#00dfd8,#f5af19,#ff0080);
 background-size:600% 600%;
 animation:gradientMove 15s ease infinite;
+transition:background .4s ease,color .4s ease;
 }
 
 @keyframes gradientMove{
@@ -18,6 +19,59 @@ animation:gradientMove 15s ease infinite;
 50%{background-position:100% 50%}
 100%{background-position:0% 50%}
 }
+
+/* ==============================
+   DARK / LIGHT MODE
+   ============================== */
+
+body.light-mode{
+color:#172033;
+background:linear-gradient(135deg,#f8fbff,#eaf4ff,#ffffff,#eef2ff);
+background-size:400% 400%;
+animation:gradientMove 15s ease infinite;
+}
+
+body.light-mode header{
+background:rgba(255,255,255,.78);
+border-bottom:1px solid rgba(15,23,42,.12);
+}
+
+body.light-mode .brand-link,
+body.light-mode nav ul li a,
+body.light-mode .header-icon,
+body.light-mode .theme-toggle,
+body.light-mode .menu-toggle{
+color:#172033;
+}
+
+body.light-mode nav ul li a:hover,
+body.light-mode .header-icon:hover,
+body.light-mode .theme-toggle:hover,
+body.light-mode .menu-toggle:hover{
+background:rgba(15,23,42,.07);
+}
+
+body.light-mode .search-section h2{
+color:#172033;
+}
+
+body.light-mode .search-section input{
+background:rgba(255,255,255,.85);
+border-color:rgba(15,23,42,.15);
+color:#172033;
+}
+
+body.light-mode .search-section input::placeholder{
+color:#64748b;
+}
+
+body.light-mode .shops h2{
+color:#172033;
+}
+
+/* ==============================
+   HEADER
+   ============================== */
 
 header{
 display:flex;
@@ -97,6 +151,10 @@ transform:translateY(-3px);
 box-shadow:0 10px 28px rgba(0,0,0,.3),0 0 20px rgba(0,210,255,.18);
 }
 .menu-toggle{display:none}
+
+/* ==============================
+   HOME — PRESERVED
+   ============================== */
 
 .hero{
 min-height:100vh;
@@ -241,12 +299,40 @@ background-position:100% 50%;
 box-shadow:0 15px 32px rgba(37,99,235,.4),0 0 20px rgba(124,58,237,.25);
 }
 
+/* Mobile navigation */
 @media(max-width:900px){
 header{padding:15px 4%}
 nav{display:none}
+nav.mobile-open{
+display:block;
+position:absolute;
+top:100%;
+left:0;
+right:0;
+padding:14px 4%;
+background:rgba(8,12,30,.96);
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+border-bottom:1px solid rgba(255,255,255,.14);
+box-shadow:0 15px 35px rgba(0,0,0,.25);
+}
+nav.mobile-open ul{
+display:flex;
+flex-direction:column;
+gap:5px;
+}
+nav.mobile-open ul li a{
+width:100%;
+padding:13px 15px;
+}
+body.light-mode nav.mobile-open{
+background:rgba(255,255,255,.96);
+border-bottom-color:rgba(15,23,42,.12);
+}
 .header-actions .header-signup{display:none}
 .menu-toggle{display:grid}
 }
+
 @media(max-width:600px){
 .brand-name{font-size:18px}
 .brand-mark{width:38px;height:38px}
