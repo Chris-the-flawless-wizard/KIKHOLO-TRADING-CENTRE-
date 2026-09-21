@@ -87,7 +87,7 @@ onkeyup="searchBusiness()">
 
         <!-- Electronics -->
         <div class="shop-card">
-            <img src="images/electronics.jpg" alt="Electronics">
+            <img class="online-business-image" data-category="electronics" src="https://loremflickr.com/800/600/electronics?lock=101" alt="Electronics">
             <h3>Electronics</h3>
             <p>TVs, Radios, Home Theatres, Refrigerators, Speakers and other electronic appliances.</p>
 
@@ -98,7 +98,7 @@ onkeyup="searchBusiness()">
 
         <!-- Phones -->
         <div class="shop-card">
-            <img src="images/phones.jpg" alt="Phones">
+            <img class="online-business-image" data-category="smartphone,mobile-phone" src="https://loremflickr.com/800/600/smartphone?lock=102" alt="Phones">
             <h3>Phones</h3>
             <p>Smartphones, Accessories, Repairs and Mobile Services.</p>
 
@@ -109,7 +109,7 @@ onkeyup="searchBusiness()">
 
         <!-- Computers -->
         <div class="shop-card">
-            <img src="images/computers.jpg" alt="Computers">
+            <img class="online-business-image" data-category="laptop,computer" src="https://loremflickr.com/800/600/laptop?lock=103" alt="Computers">
             <h3>Computers</h3>
             <p>Laptops, Desktops, Printers, Networking and Accessories.</p>
 
@@ -120,7 +120,7 @@ onkeyup="searchBusiness()">
 
         <!-- Furniture -->
         <div class="shop-card">
-            <img src="images/furniture.jpg" alt="Furniture">
+            <img class="online-business-image" data-category="furniture,sofa" src="https://loremflickr.com/800/600/furniture?lock=104" alt="Furniture">
             <h3>Furniture</h3>
             <p>Office, Home, School and Hotel Furniture.</p>
 
@@ -131,7 +131,7 @@ onkeyup="searchBusiness()">
 
         <!-- Hardware -->
         <div class="shop-card">
-            <img src="images/hardware.jpg" alt="Hardware">
+            <img class="online-business-image" data-category="hardware,tools,construction" src="https://loremflickr.com/800/600/hardware?lock=105" alt="Hardware">
             <h3>Hardware</h3>
             <p>Building Materials, Paints, Tools and Construction Supplies.</p>
 
@@ -142,7 +142,7 @@ onkeyup="searchBusiness()">
 
         <!-- Fashion -->
         <div class="shop-card">
-            <img src="images/fashion.jpg" alt="Fashion">
+            <img class="online-business-image" data-category="fashion,clothing" src="https://loremflickr.com/800/600/fashion?lock=106" alt="Fashion">
             <h3>Fashion</h3>
             <p>Clothes, Shoes, Bags, Jewellery and Fashion Accessories.</p>
 
@@ -153,7 +153,7 @@ onkeyup="searchBusiness()">
 
         <!-- Transport -->
         <div class="shop-card">
-            <img src="images/transport.jpg" alt="Transport">
+            <img class="online-business-image" data-category="transport,car,truck" src="https://loremflickr.com/800/600/transport?lock=107" alt="Transport">
             <h3>Transport</h3>
             <p>Taxi Services, Vehicle Hire, Delivery and Logistics.</p>
 
@@ -164,7 +164,7 @@ onkeyup="searchBusiness()">
 
         <!-- Retail Shop -->
         <div class="shop-card">
-            <img src="images/shop.jpg" alt="Retail Shop">
+            <img class="online-business-image" data-category="supermarket,retail,shopping" src="https://loremflickr.com/800/600/supermarket?lock=108" alt="Retail Shop">
             <h3>Retail Shop</h3>
             <p>Household Goods, Stationery, Kitchenware and Everyday Essentials.</p>
 
@@ -176,6 +176,25 @@ onkeyup="searchBusiness()">
     </div>
 </section>
 
+
+<!-- Online business images: refresh automatically without storing pictures in GitHub -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const images = document.querySelectorAll(".online-business-image");
+
+    function refreshBusinessImages() {
+        images.forEach((image, index) => {
+            const category = image.dataset.category;
+            const randomSeed = Date.now() + index + Math.floor(Math.random() * 100000);
+
+            image.src = `https://loremflickr.com/800/600/${category}?lock=${randomSeed}`;
+        });
+    }
+
+    // Refresh the business pictures every 30 minutes.
+    setInterval(refreshBusinessImages, 30 * 60 * 1000);
+});
+</script>
 
 <script src="script.js"></script>
 </body>
