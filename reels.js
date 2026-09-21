@@ -1,5 +1,9 @@
 /* CHRISXCHANGE REELS — immersive vertical feed */
 const REELS_KEY="chrisxchange-reels-v2",TIKTOK_KEY="chrisxchange-tiktok-reels-v1",USER_KEY="chrisxchange-reel-user";
+
+// Official TikTok embeds. Add public TikTok post URLs here.
+// Videos remain hosted by TikTok; this site does not download or re-host them.
+const TIKTOK_POSTS = [];
 let reels=[],tiktoks=[],objectUrls=new Map();
 
 document.addEventListener("DOMContentLoaded",()=>{
@@ -21,7 +25,14 @@ document.addEventListener("DOMContentLoaded",()=>{
   tiktoks.unshift({id:"tt-"+m[1],type:"tiktok",url,videoId:m[1],creator:(url.match(/tiktok\.com\/@([^/]+)/i)||[])[1]||"TikTok creator",caption:document.getElementById("tiktokCaption").value.trim(),likes:0,comments:[],createdAt:new Date().toISOString()});
   localStorage.setItem(TIKTOK_KEY,JSON.stringify(tiktoks));tf.reset();close(tm);render();
  });
- reels=JSON.parse(localStorage.getItem(REELS_KEY)||"[]");tiktoks=JSON.parse(localStorage.getItem(TIKTOK_KEY)||"[]");render();
+ reels=JSON.parse(localStorage.getItem(REELS_KEY)||"[]");
+ tiktoks=JSON.parse(localStorage.getItem(TIKTOK_KEY)||"[]");
+ const configured=TIKTOK_POSTS.map((p,i)=>{
+   const m=String(p.url||"").match(/tiktok\.com\/@([^/]+)\/video\/(\d+)/i);
+   return m?{id:"tt-config-"+m[2],type:"tiktok",url:p.url,videoId:m[2],creator:m[1],caption:p.caption||"Trade & business video",likes:0,comments:[],createdAt:"2026-01-01T00:00:00.000Z",configured:true}:null;
+ }).filter(Boolean);
+ tiktoks=[...configured,...tiktoks.filter(x=>!configured.some(y=>y.id==="tt-config-"+x.videoId))];
+ render();
 });
 
 function dbOpen(){return new Promise((resolve,reject)=>{const r=indexedDB.open("chrisxchange-reels-db",1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains("videos"))r.result.createObjectStore("videos")};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})}
