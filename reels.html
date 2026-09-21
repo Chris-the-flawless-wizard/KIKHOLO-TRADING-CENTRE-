@@ -2,161 +2,44 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Reels | CHRISXCHANGE</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="reels.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body class="reels-page">
-
-<header>
-  <div class="logo">
-    <a href="index.html#home" class="brand-link">
-      <span class="brand-mark"><i class="fa-solid fa-arrows-rotate"></i></span>
-      <span class="brand-name">CHRIS<span>XCHANGE</span></span>
-    </a>
-  </div>
-  <nav aria-label="Main navigation">
-    <ul>
-      <li><a href="index.html#home"><i class="fa-solid fa-house"></i> Home</a></li>
-      <li><a href="index.html#shops"><i class="fa-solid fa-store"></i> Businesses</a></li>
-      <li><a class="active" href="reels.html"><i class="fa-solid fa-clapperboard"></i> Reels</a></li>
-      <li><a href="index.html#services"><i class="fa-solid fa-layer-group"></i> Services</a></li>
-      <li><a href="index.html#gallery"><i class="fa-solid fa-images"></i> Gallery</a></li>
-      <li><a href="index.html#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
-    </ul>
-  </nav>
-  <div class="header-actions">
-    <a class="header-icon" href="index%20html/login.html" aria-label="Log in" title="Log in"><i class="fa-solid fa-user"></i></a>
-    <a class="header-signup" href="index%20html/register.html">Sign Up</a>
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark and light mode"><i class="fa-solid fa-moon"></i></button>
-    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
-  </div>
-</header>
-
-<main>
-  <section class="reels-hero">
-    <div>
-      <span class="reels-kicker"><i class="fa-solid fa-fire"></i> CHRISXCHANGE REELS</span>
-      <h1>Discover. Watch. <span>Connect.</span></h1>
-      <p>Short videos from Kikholo businesses and the community.</p>
-      <button class="upload-trigger" id="openUpload"><i class="fa-solid fa-plus"></i> Create a Reel</button>
-    </div>
-  </section>
-
-  <section class="reels-toolbar">
-    <div>
-      <h2>Latest Reels</h2>
-      <p id="reelCount">0 reels</p>
-    </div>
-    <button class="refresh-btn" id="refreshReels"><i class="fa-solid fa-rotate"></i> Refresh</button>
-  </section>
-
-  <section class="reels-feed" id="reelsFeed" aria-live="polite"></section>
-  <div class="empty-reels" id="emptyReels">
-    <i class="fa-solid fa-video"></i>
-    <h3>No reels yet</h3>
-    <p>Be the first business or community member to share a short video.</p>
-    <button class="upload-trigger" id="emptyUpload"><i class="fa-solid fa-plus"></i> Upload a Reel</button>
-  </div>
-
-  <section class="trade-videos">
-    <div class="trade-heading">
-      <div>
-        <span class="trade-kicker"><i class="fa-solid fa-chart-line"></i> TRADE & BUSINESS VIDEOS</span>
-        <h2>Learn. Discover. <span>Trade.</span></h2>
-        <p>Explore business, entrepreneurship, markets, products and trading content from YouTube and TikTok.</p>
-      </div>
-      <a class="social-video-btn" href="https://www.youtube.com/results?search_query=business+trading+entrepreneurship" target="_blank" rel="noopener noreferrer">
-        <i class="fa-brands fa-youtube"></i> More on YouTube
-      </a>
-    </div>
-
-    <div class="external-video-grid">
-      <article class="external-video-card">
-        <div class="external-video-title">
-          <span><i class="fa-brands fa-youtube"></i> Business & Entrepreneurship</span>
-          <a href="https://www.youtube.com/results?search_query=business+entrepreneurship" target="_blank" rel="noopener noreferrer">Open</a>
-        </div>
-        <div class="external-video-frame">
-          <iframe
-            src="https://www.youtube.com/embed?listType=search&list=business%20entrepreneurship"
-            title="Business and entrepreneurship videos on YouTube"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen></iframe>
-        </div>
-      </article>
-
-      <article class="external-video-card">
-        <div class="external-video-title">
-          <span><i class="fa-brands fa-youtube"></i> Trading & Markets</span>
-          <a href="https://www.youtube.com/results?search_query=trading+markets+business" target="_blank" rel="noopener noreferrer">Open</a>
-        </div>
-        <div class="external-video-frame">
-          <iframe
-            src="https://www.youtube.com/embed?listType=search&list=trading%20markets%20business"
-            title="Trading and markets videos on YouTube"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen></iframe>
-        </div>
-      </article>
-
-      <article class="external-video-card">
-        <div class="external-video-title">
-          <span><i class="fa-brands fa-youtube"></i> African Business</span>
-          <a href="https://www.youtube.com/results?search_query=Africa+business+entrepreneurship" target="_blank" rel="noopener noreferrer">Open</a>
-        </div>
-        <div class="external-video-frame">
-          <iframe
-            src="https://www.youtube.com/embed?listType=search&list=Africa%20business%20entrepreneurship"
-            title="African business and entrepreneurship videos on YouTube"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen></iframe>
-        </div>
-      </article>
-    </div>
-
-    <div class="tiktok-panel">
-      <div class="tiktok-icon"><i class="fa-brands fa-tiktok"></i></div>
-      <div>
-        <h3>Trade content on TikTok</h3>
-        <p>Discover short business, product, entrepreneurship and trading videos on TikTok. TikTok posts will be embedded here when you add their original post links.</p>
-      </div>
-      <a class="social-video-btn tiktok-btn" href="https://www.tiktok.com/search?q=business%20trading" target="_blank" rel="noopener noreferrer">
-        <i class="fa-brands fa-tiktok"></i> Explore TikTok
-      </a>
-    </div>
-  </section>
+<main class="reels-screen">
+<a class="reels-back" href="index.html#home" aria-label="Back to home"><i class="fa-solid fa-arrow-left"></i></a>
+<button class="reels-add" id="openUpload" aria-label="Create a reel"><i class="fa-solid fa-plus"></i></button>
+<div class="reels-feed" id="reelsFeed"></div>
+<div class="reels-empty" id="emptyReels">
+<i class="fa-solid fa-clapperboard"></i><h2>No Reels Yet</h2>
+<p>Upload a video or add an original TikTok post link.</p>
+<div class="empty-actions">
+<button class="primary-reel-btn" id="emptyUpload"><i class="fa-solid fa-video"></i> Upload video</button>
+<button class="secondary-reel-btn" id="openTikTok"><i class="fa-brands fa-tiktok"></i> Add TikTok</button>
+</div></div>
+<div class="reel-dots-menu" id="dotsMenu" aria-hidden="true"></div>
 </main>
-
-<div class="upload-modal" id="uploadModal" aria-hidden="true">
-  <div class="upload-card">
-    <button class="modal-close" id="closeUpload" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
-    <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
-    <h2>Create a Reel</h2>
-    <p>Upload a short MP4, WebM or MOV video from your device.</p>
-    <form id="reelForm">
-      <label>Creator name
-        <input id="creatorName" type="text" maxlength="40" placeholder="Your name or business" required>
-      </label>
-      <label>Caption
-        <textarea id="reelCaption" maxlength="180" placeholder="What are you sharing?" required></textarea>
-      </label>
-      <label class="file-picker">Choose video
-        <input id="reelVideo" type="file" accept="video/mp4,video/webm,video/quicktime" required>
-        <span id="fileName">No video selected</span>
-      </label>
-      <button type="submit" class="submit-reel"><i class="fa-solid fa-paper-plane"></i> Publish Reel</button>
-      <small>Maximum video size: 50 MB. Your uploaded reel is currently saved in this browser.</small>
-    </form>
-  </div>
-</div>
-
-<script src="script.js"></script>
-<script src="reels.js"></script>
-</body>
-</html>
+<div class="upload-modal" id="uploadModal" aria-hidden="true"><div class="upload-card">
+<button class="modal-close" id="closeUpload" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+<div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div><h2>Create a Reel</h2>
+<p>Upload a short video. It will be stored in this browser until Supabase Storage is connected.</p>
+<form id="reelForm">
+<label>Creator name<input id="creatorName" maxlength="40" placeholder="Your name or business" required></label>
+<label>Caption<textarea id="reelCaption" maxlength="180" placeholder="What are you sharing?" required></textarea></label>
+<label class="file-picker">Choose video<input id="reelVideo" type="file" accept="video/mp4,video/webm,video/quicktime" required><span id="fileName">No video selected</span></label>
+<button type="submit" class="submit-reel"><i class="fa-solid fa-paper-plane"></i> Publish Reel</button><small>Maximum video size: 50 MB.</small>
+</form></div></div>
+<div class="upload-modal" id="tiktokModal" aria-hidden="true"><div class="upload-card">
+<button class="modal-close" id="closeTikTok" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+<div class="upload-icon tiktok-upload-icon"><i class="fa-brands fa-tiktok"></i></div><h2>Add TikTok Reel</h2>
+<p>Paste the original public TikTok post URL. The post is embedded instead of being copied or re-hosted.</p>
+<form id="tiktokForm">
+<label>TikTok post URL<input id="tiktokUrl" type="url" placeholder="https://www.tiktok.com/@creator/video/..." required></label>
+<label>Caption<input id="tiktokCaption" maxlength="180" placeholder="Business, trade or product video"></label>
+<button type="submit" class="submit-reel"><i class="fa-brands fa-tiktok"></i> Add to Reels</button>
+</form></div></div>
+<script src="script.js"></script><script src="reels.js"></script>
+</body></html>
