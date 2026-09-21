@@ -130,9 +130,133 @@ width:min(700px,92%);margin:10px auto 90px;text-align:center;
 padding:55px 25px;border:1px dashed rgba(255,255,255,.25);
 border-radius:25px;background:rgba(255,255,255,.06);
 }
-.empty-reels>i{font-size:45px;margin-bottom:15px;opacity:.8}
+.empty-reels>i{font-size:45px;margin-bottom:15px}
 .empty-reels h3{font-size:24px;margin-bottom:8px}
 .empty-reels p{opacity:.75;margin-bottom:20px}
+
+/* ==============================
+   TRADE VIDEO HUB
+   ============================== */
+
+.trade-videos{
+width:min(1200px,92%);
+margin:20px auto 100px;
+padding:45px 0 10px;
+}
+.trade-heading{
+display:flex;
+align-items:end;
+justify-content:space-between;
+gap:25px;
+margin-bottom:28px;
+}
+.trade-kicker{
+display:inline-flex;
+align-items:center;
+gap:8px;
+padding:8px 13px;
+border-radius:999px;
+background:rgba(255,255,255,.1);
+border:1px solid rgba(255,255,255,.16);
+font-size:12px;
+font-weight:850;
+letter-spacing:1.1px;
+}
+.trade-heading h2{
+font-size:clamp(30px,5vw,46px);
+margin:14px 0 9px;
+font-weight:950;
+}
+.trade-heading h2 span{
+background:linear-gradient(90deg,#ff4da6,#8b5cf6,#42e8ff);
+-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.trade-heading p{max-width:760px;opacity:.78;line-height:1.55}
+.social-video-btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+padding:12px 17px;
+border-radius:13px;
+background:rgba(255,255,255,.1);
+border:1px solid rgba(255,255,255,.17);
+color:inherit;
+text-decoration:none;
+font-weight:850;
+white-space:nowrap;
+transition:.3s;
+}
+.social-video-btn:hover{
+transform:translateY(-3px);
+background:rgba(255,255,255,.17);
+box-shadow:0 12px 30px rgba(0,0,0,.2);
+}
+.external-video-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:22px;
+}
+.external-video-card{
+overflow:hidden;
+border-radius:22px;
+background:rgba(10,15,35,.68);
+border:1px solid rgba(255,255,255,.15);
+box-shadow:0 18px 45px rgba(0,0,0,.22);
+backdrop-filter:blur(12px);
+}
+.external-video-title{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+padding:15px 16px;
+font-weight:850;
+}
+.external-video-title span{
+display:flex;
+align-items:center;
+gap:8px;
+}
+.external-video-title a{
+color:inherit;
+font-size:12px;
+opacity:.7;
+text-decoration:none;
+}
+.external-video-title a:hover{opacity:1}
+.external-video-frame{
+position:relative;
+aspect-ratio:16/10;
+background:#05070d;
+}
+.external-video-frame iframe{
+width:100%;
+height:100%;
+border:0;
+display:block;
+}
+.tiktok-panel{
+margin-top:24px;
+display:flex;
+align-items:center;
+gap:17px;
+padding:20px;
+border-radius:22px;
+background:linear-gradient(135deg,rgba(255,0,128,.13),rgba(124,58,237,.12),rgba(0,112,243,.13));
+border:1px solid rgba(255,255,255,.15);
+box-shadow:0 18px 45px rgba(0,0,0,.18);
+}
+.tiktok-icon{
+width:52px;height:52px;flex:0 0 52px;
+display:grid;place-items:center;
+border-radius:15px;
+background:#05070d;
+font-size:23px;
+}
+.tiktok-panel h3{font-size:19px;margin-bottom:5px}
+.tiktok-panel p{opacity:.72;font-size:14px;line-height:1.5}
+.tiktok-panel .social-video-btn{margin-left:auto}
 
 .upload-modal{
 position:fixed;inset:0;z-index:500;display:none;place-items:center;
@@ -174,17 +298,25 @@ font-size:15px;
 #reelForm small{display:block;margin-top:11px;color:#94a3b8;line-height:1.45}
 
 body.light-mode .reels-hero{background:radial-gradient(circle at 50% 20%,rgba(255,0,128,.12),transparent 42%)}
-body.light-mode .reel-card{background:rgba(255,255,255,.88);border-color:rgba(15,23,42,.1);color:#172033}
+body.light-mode .reel-card,
+body.light-mode .external-video-card{background:rgba(255,255,255,.88);border-color:rgba(15,23,42,.1);color:#172033}
 body.light-mode .reel-actions{border-color:rgba(15,23,42,.08)}
 body.light-mode .comments{background:rgba(15,23,42,.035);border-color:rgba(15,23,42,.08)}
 body.light-mode .comment-form input{background:#fff;color:#172033;border-color:rgba(15,23,42,.14)}
 body.light-mode .upload-card{background:#fff;color:#172033}
 body.light-mode #reelForm input,body.light-mode #reelForm textarea{background:#f8fafc;color:#172033;border-color:rgba(15,23,42,.14)}
 body.light-mode .file-picker span{border-color:rgba(15,23,42,.18);color:#475569}
+body.light-mode .trade-kicker,
+body.light-mode .social-video-btn{background:rgba(15,23,42,.05);border-color:rgba(15,23,42,.1)}
+body.light-mode .tiktok-panel{border-color:rgba(15,23,42,.1)}
 
 @media(max-width:900px){
 .reels-page nav{display:none}
 .reels-page nav.mobile-open{display:block}
+.external-video-grid{grid-template-columns:1fr 1fr}
+.trade-heading{align-items:start;flex-direction:column}
+.tiktok-panel{align-items:flex-start;flex-wrap:wrap}
+.tiktok-panel .social-video-btn{margin-left:0}
 }
 @media(max-width:600px){
 .reels-hero{min-height:38vh;padding-top:85px}
@@ -193,4 +325,7 @@ body.light-mode .file-picker span{border-color:rgba(15,23,42,.18);color:#475569}
 .reels-feed{grid-template-columns:1fr;max-width:430px}
 .reel-video-wrap{aspect-ratio:9/15}
 .upload-card{padding:25px 20px}
+.external-video-grid{grid-template-columns:1fr}
+.trade-videos{padding-top:25px}
+.tiktok-panel{padding:17px}
 }
