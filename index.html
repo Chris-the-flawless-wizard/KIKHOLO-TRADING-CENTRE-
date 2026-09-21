@@ -193,7 +193,7 @@ onkeyup="searchBusiness()">
 </section>
 
 
-<!-- Online business images: refresh automatically without storing pictures in GitHub -->
+<!-- Online business images: refresh immediately and every 2 seconds -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const images = document.querySelectorAll(".online-business-image");
@@ -201,14 +201,17 @@ document.addEventListener("DOMContentLoaded", () => {
     function refreshBusinessImages() {
         images.forEach((image, index) => {
             const category = image.dataset.category;
-            const randomSeed = Date.now() + index + Math.floor(Math.random() * 100000);
+            const randomSeed = Date.now() + index + Math.floor(Math.random() * 1000000);
 
             image.src = `https://loremflickr.com/800/600/${category}?lock=${randomSeed}`;
         });
     }
 
-    // Refresh the business pictures every 30 minutes.
-    setInterval(refreshBusinessImages, 30 * 60 * 1000);
+    // Show fresh internet images immediately.
+    refreshBusinessImages();
+
+    // Change the pictures every 2 seconds.
+    setInterval(refreshBusinessImages, 2000);
 });
 </script>
 
