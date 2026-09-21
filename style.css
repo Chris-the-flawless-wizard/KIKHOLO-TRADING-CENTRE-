@@ -26,9 +26,8 @@ transition:background .4s ease,color .4s ease;
 
 body.light-mode{
 color:#172033;
-background:linear-gradient(135deg,#f8fbff,#eaf4ff,#ffffff,#eef2ff);
-background-size:400% 400%;
-animation:gradientMove 15s ease infinite;
+background:#ffffff;
+animation:none;
 }
 
 body.light-mode header{
