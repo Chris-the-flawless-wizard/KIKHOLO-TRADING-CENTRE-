@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reels | CHRISXCHANGE</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="reels.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body class="reels-page">
+
+<header>
+  <div class="logo">
+    <a href="index.html#home" class="brand-link">
+      <span class="brand-mark"><i class="fa-solid fa-arrows-rotate"></i></span>
+      <span class="brand-name">CHRIS<span>XCHANGE</span></span>
+    </a>
+  </div>
+  <nav aria-label="Main navigation">
+    <ul>
+      <li><a href="index.html#home"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li><a href="index.html#shops"><i class="fa-solid fa-store"></i> Businesses</a></li>
+      <li><a class="active" href="reels.html"><i class="fa-solid fa-clapperboard"></i> Reels</a></li>
+      <li><a href="index.html#services"><i class="fa-solid fa-layer-group"></i> Services</a></li>
+      <li><a href="index.html#gallery"><i class="fa-solid fa-images"></i> Gallery</a></li>
+      <li><a href="index.html#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+    </ul>
+  </nav>
+  <div class="header-actions">
+    <a class="header-icon" href="index%20html/login.html" aria-label="Log in" title="Log in"><i class="fa-solid fa-user"></i></a>
+    <a class="header-signup" href="index%20html/register.html">Sign Up</a>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark and light mode"><i class="fa-solid fa-moon"></i></button>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
+  </div>
+</header>
+
+<main>
+  <section class="reels-hero">
+    <div>
+      <span class="reels-kicker"><i class="fa-solid fa-fire"></i> CHRISXCHANGE REELS</span>
+      <h1>Discover. Watch. <span>Connect.</span></h1>
+      <p>Short videos from Kikholo businesses and the community.</p>
+      <button class="upload-trigger" id="openUpload"><i class="fa-solid fa-plus"></i> Create a Reel</button>
+    </div>
+  </section>
+
+  <section class="reels-toolbar">
+    <div>
+      <h2>Latest Reels</h2>
+      <p id="reelCount">0 reels</p>
+    </div>
+    <button class="refresh-btn" id="refreshReels"><i class="fa-solid fa-rotate"></i> Refresh</button>
+  </section>
+
+  <section class="reels-feed" id="reelsFeed" aria-live="polite"></section>
+  <div class="empty-reels" id="emptyReels">
+    <i class="fa-solid fa-video"></i>
+    <h3>No reels yet</h3>
+    <p>Be the first business or community member to share a short video.</p>
+    <button class="upload-trigger" id="emptyUpload"><i class="fa-solid fa-plus"></i> Upload a Reel</button>
+  </div>
+</main>
+
+<div class="upload-modal" id="uploadModal" aria-hidden="true">
+  <div class="upload-card">
+    <button class="modal-close" id="closeUpload" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+    <h2>Create a Reel</h2>
+    <p>Upload a short MP4, WebM or MOV video from your device.</p>
+    <form id="reelForm">
+      <label>Creator name
+        <input id="creatorName" type="text" maxlength="40" placeholder="Your name or business" required>
+      </label>
+      <label>Caption
+        <textarea id="reelCaption" maxlength="180" placeholder="What are you sharing?" required></textarea>
+      </label>
+      <label class="file-picker">Choose video
+        <input id="reelVideo" type="file" accept="video/mp4,video/webm,video/quicktime" required>
+        <span id="fileName">No video selected</span>
+      </label>
+      <button type="submit" class="submit-reel"><i class="fa-solid fa-paper-plane"></i> Publish Reel</button>
+      <small>Maximum video size: 50 MB. Your uploaded reel is currently saved in this browser.</small>
+    </form>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script src="reels.js"></script>
+</body>
+</html>
