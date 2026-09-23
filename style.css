@@ -1165,3 +1165,74 @@ body.light-mode .feature-pill small{color:#64748b}
 .search-box-premium button{padding:0 13px}
 .shops-premium{padding-top:55px!important}
 }
+
+
+/* =========================================================
+   HOMEPAGE FLOW / WELCOME PANEL
+   ========================================================= */
+.home-welcome{
+position:relative;
+padding:72px 7% 38px;
+text-align:center;
+overflow:hidden;
+}
+.home-welcome::before{
+content:"";
+position:absolute;
+width:420px;height:180px;
+left:50%;top:20px;
+transform:translateX(-50%);
+background:radial-gradient(ellipse,rgba(124,58,237,.18),transparent 70%);
+filter:blur(10px);
+pointer-events:none;
+}
+.home-welcome-inner{
+position:relative;
+max-width:850px;
+margin:auto;
+}
+.home-welcome .section-kicker{
+margin-bottom:12px;
+}
+.home-welcome h2{
+font-size:clamp(30px,4.5vw,52px);
+line-height:1.08;
+letter-spacing:-1.5px;
+margin:0 0 14px;
+color:#fff;
+}
+.home-welcome h2 span{
+background:linear-gradient(90deg,#ff4da6,#a855f7,#39eaff);
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent;
+}
+.home-welcome p{
+max-width:700px;
+margin:auto;
+color:#94a3b8;
+line-height:1.75;
+font-size:15px;
+}
+.home-feature-strip{
+margin-top:20px;
+margin-bottom:20px;
+}
+.market-stats{
+margin-top:35px!important;
+}
+.shops-premium{
+padding-bottom:55px!important;
+}
+.categories-section{
+padding-top:70px!important;
+}
+.why-section,.steps-section,.gallery-preview{
+position:relative;
+}
+@media(max-width:600px){
+.home-welcome{padding:55px 6% 25px}
+.home-welcome h2{font-size:32px}
+.home-welcome p{font-size:14px}
+.market-stats{margin-top:25px!important}
+}
