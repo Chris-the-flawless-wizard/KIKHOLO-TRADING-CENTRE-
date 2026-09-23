@@ -49,42 +49,82 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </header>
 
 
-<section class="hero" id="home">
+<section class="hero hero-premium" id="home">
+    <div class="hero-orb hero-orb-one"></div>
+    <div class="hero-orb hero-orb-two"></div>
+    <div class="hero-grid"></div>
 
-<div class="hero-content">
+    <div class="hero-content">
+        <div class="hero-badge"><i class="fa-solid fa-bolt"></i> UGANDA'S DIGITAL MARKETPLACE</div>
 
-<div class="hero-badge"><i class="fa-solid fa-bolt"></i> THE NEXT-GENERATION MARKETPLACE</div>
-<h1>CHRIS<span>XCHANGE</span></h1>
+        <div class="hero-logo-wrap">
+            <img src="assets/chrisxchange-logo.svg" alt="CHRISXCHANGE premium logo">
+        </div>
 
-<p>
-Connect businesses, customers and opportunities through one modern digital marketplace.
-</p>
+        <p class="hero-eyebrow">CONNECT <span>•</span> DISCOVER <span>•</span> TRADE</p>
 
-<button onclick="document.getElementById('shops').scrollIntoView({behavior:'smooth'})">
-    Explore Marketplace <i class="fa-solid fa-arrow-right"></i>
-</button>
+        <h1>Everything You Need.<br><span>One Powerful Marketplace.</span></h1>
 
-</div>
+        <p class="hero-description">
+            Discover trusted businesses, products, services and opportunities — all in one beautiful digital marketplace built for modern trade.
+        </p>
 
+        <div class="hero-actions">
+            <a class="hero-primary" href="#shops">
+                Explore Businesses <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a class="hero-secondary" href="reels.html">
+                <i class="fa-solid fa-play"></i> Watch Reels
+            </a>
+        </div>
+
+        <div class="hero-trust">
+            <span><i class="fa-solid fa-circle-check"></i> Local Businesses</span>
+            <span><i class="fa-solid fa-circle-check"></i> Easy Discovery</span>
+            <span><i class="fa-solid fa-circle-check"></i> Mobile Friendly</span>
+        </div>
+    </div>
+
+    <div class="hero-floating hero-floating-left">
+        <div class="floating-icon"><i class="fa-solid fa-store"></i></div>
+        <div><strong>Discover</strong><small>Businesses near you</small></div>
+    </div>
+
+    <div class="hero-floating hero-floating-right">
+        <div class="floating-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <div><strong>Grow</strong><small>Reach more customers</small></div>
+    </div>
+
+    <a href="#shops" class="hero-scroll" aria-label="Scroll to businesses">
+        <span>SCROLL TO EXPLORE</span><i class="fa-solid fa-chevron-down"></i>
+    </a>
+</section>
+
+<section class="quick-search">
+    <div class="quick-search-inner">
+        <div class="quick-search-heading">
+            <span><i class="fa-solid fa-magnifying-glass"></i></span>
+            <div>
+                <strong>What are you looking for?</strong>
+                <small>Search businesses, categories and services</small>
+            </div>
+        </div>
+        <div class="search-box-premium">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search for a business..." onkeyup="searchBusiness()" aria-label="Search businesses">
+            <button type="button" onclick="document.getElementById('searchInput').focus()">Search</button>
+        </div>
+    </div>
 </section>
 
 
-<section class="search-section">
 
-<h2>Search Businesses</h2>
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search for a business..."
-onkeyup="searchBusiness()">
-
-</section>
-
-
-
-<section class="shops" id="shops">
-    <h2>Featured Businesses</h2>
+<section class="shops shops-premium" id="shops">
+    <div class="section-heading shops-heading">
+        <span class="section-kicker"><i class="fa-solid fa-store"></i> DISCOVER LOCAL BUSINESS</span>
+        <h2>Featured Businesses</h2>
+        <p>Explore our growing collection of businesses and find exactly what you need.</p>
+    </div>
 
     <div class="shop-container">
 
@@ -193,6 +233,29 @@ onkeyup="searchBusiness()">
         </div>
 
     </div>
+</section>
+
+<section class="home-feature-strip" aria-label="Quick marketplace actions">
+    <a href="#shops" class="feature-pill">
+        <span><i class="fa-solid fa-store"></i></span>
+        <div><strong>Explore Stores</strong><small>Browse businesses</small></div>
+        <i class="fa-solid fa-arrow-right"></i>
+    </a>
+    <a href="reels.html" class="feature-pill">
+        <span><i class="fa-solid fa-clapperboard"></i></span>
+        <div><strong>Watch Reels</strong><small>See what's trending</small></div>
+        <i class="fa-solid fa-arrow-right"></i>
+    </a>
+    <a href="index%20html/register-business.html" class="feature-pill">
+        <span><i class="fa-solid fa-shop"></i></span>
+        <div><strong>Register Business</strong><small>Grow your reach</small></div>
+        <i class="fa-solid fa-arrow-right"></i>
+    </a>
+    <a href="#categories" class="feature-pill">
+        <span><i class="fa-solid fa-layer-group"></i></span>
+        <div><strong>All Categories</strong><small>Find your niche</small></div>
+        <i class="fa-solid fa-arrow-right"></i>
+    </a>
 </section>
 
 
