@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Products | CHRISXCHANGE</title>
+<link rel="icon" type="image/svg+xml" href="assets/chrisxchange-logo.svg">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="products.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<header class="products-header">
+<a class="brand-link" href="index.html"><img class="brand-logo" src="assets/chrisxchange-logo.svg" alt="CHRISXCHANGE"><span class="brand-name">CHRIS<span>XCHANGE</span></span></a>
+<a class="header-signup" href="index.html#shops"><i class="fa-solid fa-arrow-left"></i> Businesses</a>
+</header>
+<main class="catalogue-page">
+<section class="catalogue-hero">
+<span class="section-kicker"><i class="fa-solid fa-box-open"></i> CHRISXCHANGE CATALOGUE</span>
+<h1 id="catalogueTitle">All Products</h1>
+<p id="catalogueSubtitle">Discover products from businesses on CHRISXCHANGE.</p>
+<div class="catalogue-tools">
+<label class="catalogue-search"><i class="fa-solid fa-magnifying-glass"></i><input id="productSearch" type="search" placeholder="Search products..."></label>
+<select id="sortProducts" aria-label="Sort products"><option value="featured">Featured first</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="name">Name A-Z</option></select>
+</div>
+<div id="categoryFilters" class="category-filters"></div>
+</section>
+<section id="productStatus" class="product-status"><i class="fa-solid fa-spinner fa-spin"></i> Loading catalogue...</section>
+<section id="productGrid" class="product-grid" aria-live="polite"></section>
+</main>
+<script src="products.js"></script>
+</body>
+</html>
