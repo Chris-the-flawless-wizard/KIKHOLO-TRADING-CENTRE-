@@ -474,35 +474,25 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const images = document.querySelectorAll(".online-business-image");
-    const positions = {};
+    let imageCycle = 0;
 
     function getKey(image) {
         return image.dataset.category.split(",")[0].trim();
     }
 
     function showRelevantImages() {
+        imageCycle++;
+
         images.forEach((image) => {
-            const key = getKey(image);
-            const set = imageSets[key];
-
-            if (!set) return;
-
-            positions[key] = ((positions[key] || 0) + 1) % set.length;
-            image.src = set[positions[key]];
-        });
-    }
-
-    // Show the first relevant picture immediately.
-    images.forEach((image) => {
         const key = getKey(image);
         const set = imageSets[key];
+
         if (set) {
-            positions[key] = 0;
             image.src = set[0];
         }
     });
 
-    // Change only within the correct category every 5 seconds.
+    // Change ALL business pictures together every 5 seconds.
     setInterval(showRelevantImages, 5000);
 });
 </script>
