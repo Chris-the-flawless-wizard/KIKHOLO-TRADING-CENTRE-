@@ -387,18 +387,29 @@ position:relative;
 overflow:hidden;
 margin:20px;
 min-width:175px;
-padding:13px 25px;
-border:1px solid rgba(255,255,255,.2);
+padding:14px 28px;
+border:1px solid rgba(255,255,255,.55);
 border-radius:999px;
-background:linear-gradient(135deg,#111827 0%,#2563eb 48%,#7c3aed 100%);
-background-size:220% 220%;
+background:linear-gradient(120deg,#ff0080 0%,#ff4d6d 25%,#8b5cf6 55%,#0070f3 80%,#00d4ff 100%);
+background-size:300% 300%;
 color:#fff;
 cursor:pointer;
 font-size:15px;
-font-weight:850;
-letter-spacing:.5px;
-box-shadow:0 10px 24px rgba(37,99,235,.25),inset 0 1px 1px rgba(255,255,255,.18);
-transition:transform .3s ease,box-shadow .3s ease,background-position .5s ease;
+font-weight:900;
+letter-spacing:.7px;
+text-transform:uppercase;
+box-shadow:0 12px 28px rgba(124,58,237,.35),0 0 22px rgba(0,212,255,.2),inset 0 1px 2px rgba(255,255,255,.45);
+transition:transform .3s ease,box-shadow .3s ease,background-position .7s ease;
+animation:visitButtonGlow 5s ease infinite;
+}
+.shop-card button:hover{
+transform:translateY(-4px) scale(1.04);
+background-position:100% 50%;
+box-shadow:0 18px 38px rgba(124,58,237,.45),0 0 32px rgba(0,212,255,.35),inset 0 1px 3px rgba(255,255,255,.55);
+}
+@keyframes visitButtonGlow{
+0%,100%{background-position:0% 50%}
+50%{background-position:100% 50%}
 }
 .shop-card button::after{
 content:"→";
