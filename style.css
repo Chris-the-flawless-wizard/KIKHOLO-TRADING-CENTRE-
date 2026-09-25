@@ -876,7 +876,7 @@ color:#dbeafe!important;
 .hero-actions{
 display:flex;
 justify-content:center;
-gap:13px;
+gap:22px;
 flex-wrap:wrap;
 }
 .hero-actions a{
