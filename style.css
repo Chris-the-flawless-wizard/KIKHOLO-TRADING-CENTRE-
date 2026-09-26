@@ -1351,3 +1351,30 @@ position:relative;
         letter-spacing:-1px;
     }
 }
+
+
+/* =========================================================
+   HERO TAGLINE — PERFECT CENTER ALIGNMENT
+   ========================================================= */
+.hero-premium .hero-eyebrow{
+    width:100%;
+    display:block;
+    text-align:center;
+    margin-left:auto !important;
+    margin-right:auto !important;
+}
+
+.hero-premium .hero-eyebrow span{
+    display:inline-block;
+    vertical-align:middle;
+    text-align:center;
+}
+
+@media(max-width:760px){
+    .hero-premium .hero-eyebrow{
+        width:100%;
+        text-align:center;
+        margin-left:auto !important;
+        margin-right:auto !important;
+    }
+}
