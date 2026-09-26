@@ -27,7 +27,7 @@ button,input{font:inherit}.hidden{display:none!important}
 <h1 id="authTitle">Welcome to Chats</h1><p id="authSubtitle">Sign in with your email to message people on CHRISXCHANGE.</p>
 <form id="authForm"><div class="field"><label>Full name <span id="nameLabel">(new accounts)</span></label><input id="name" autocomplete="name"></div><div class="field"><label>Email</label><input id="email" type="email" required autocomplete="email"></div><div class="field"><label>Password</label><input id="password" type="password" required minlength="6" autocomplete="current-password"></div><button class="primary" type="submit" id="authBtn">Sign In</button></form>
 <div id="authStatus" class="status"></div><div class="switch"><span id="switchText">New here?</span> <button type="button" id="switchBtn">Create an account</button></div>
-<div class="setup" id="setupNotice"><strong>One-time setup:</strong> add your Supabase publishable/anon key in this page's configuration. The project URL is already prepared for your CHRISXCHANGE Supabase project.</div>
+<div class="setup hidden" id="setupNotice"><strong>Connection notice:</strong> Chat is connected to CHRISXCHANGE Supabase.</div>
 </div></section>
 <main id="chatShell" class="chat-shell hidden">
 <aside class="sidebar"><div class="side-head"><h2>Messages</h2><div class="search"><i class="fa-solid fa-magnifying-glass"></i><input id="userSearch" placeholder="Search people"></div></div><div id="users" class="users"></div></aside>
@@ -36,7 +36,7 @@ button,input{font:inherit}.hidden{display:none!important}
 <script>
 const SUPABASE_URL="https://wopjohlkjhqymhjjxqgi.supabase.co";
 const SUPABASE_KEY="sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD";
-let sb=null,currentUser=null,selectedUser=null,allProfiles=[],realtimeChannel=null,signingUp=false;
+let sb=null,currentUser=null,selectedUser=null,allProfiles=[],realtimeChannel=null,profilesChannel=null,signingUp=false,loadingProfiles=false;
 const $=id=>document.getElementById(id);
 const configured=Boolean(SUPABASE_KEY);
 function status(msg,type="error"){const el=$("authStatus");el.textContent=msg;el.className="status show "+type}
@@ -55,15 +55,29 @@ async function init(){
 }
 $("authForm").onsubmit=async e=>{e.preventDefault();if(!sb)return status("CHRISXCHANGE Supabase connection is not configured.");status("Working...","ok");
  const email=$("email").value.trim().toLowerCase(),password=$("password").value,name=$("name").value.trim();
- if(signingUp){const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});if(error)return status(error.message);if(data.session){await ensureProfile(name);status("Account created.","ok")}else status("Account created. Check your email to confirm, then sign in.","ok")}
+ if(signingUp){
+ if(!name)return status("Please enter your full name.");
+ const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});
+ if(error)return status(error.message);
+ if(data.session){currentUser=data.user;await ensureProfile(name);showChat();status("Account created successfully.","ok")}
+ else status("Account created. Check your email to confirm, then sign in.","ok")
+}
  else{const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)return status(error.message);currentUser=data.user;showChat()}
 };
-async function ensureProfile(name){if(!currentUser)return;await sb.from("chat_profiles").upsert({id:currentUser.id,full_name:name||currentUser.user_metadata?.full_name||currentUser.email.split("@")[0],email:currentUser.email},{onConflict:"id"})}
+async function ensureProfile(name){
+ if(!currentUser)return;
+ const fullName=(name||currentUser.user_metadata?.full_name||currentUser.email?.split("@")[0]||"CHRISXCHANGE Member").trim();
+ const {error}=await sb.from("chat_profiles").upsert({id:currentUser.id,full_name:fullName,email:currentUser.email,last_seen:new Date().toISOString()},{onConflict:"id"});
+ if(error)console.warn("Chat profile:",error.message);
+}
 async function loadProfiles(){
+ if(!currentUser||loadingProfiles)return;
+ loadingProfiles=true;
  await ensureProfile(currentUser.user_metadata?.full_name||"");
  const {data,error}=await sb.from("chat_profiles").select("id,full_name,email,last_seen").neq("id",currentUser.id).order("full_name");
  if(error){$("users").innerHTML='<div class="setup">Create the chat tables using <b>supabase-chat.sql</b> in your Supabase SQL Editor.</div>';return}
  allProfiles=data||[];renderUsers(allProfiles);await markOnline();subscribeProfiles();subscribeMessages();
+ loadingProfiles=false;
 }
 function renderUsers(list){$("users").innerHTML=list.length?list.map(u=>'<button class="user" data-id="'+u.id+'"><span class="avatar">'+initials(u.full_name||u.email)+'</span><span class="user-main"><span class="user-line"><strong>'+escapeHtml(u.full_name||u.email)+'</strong><span class="time">'+(u.last_seen?fmtDay(u.last_seen):"")+'</span></span><span class="preview"><span class="online"></span>CHRISXCHANGE member</span></span></button>').join(""):'<div class="setup">No other registered users yet.</div>';document.querySelectorAll(".user").forEach(b=>b.onclick=()=>selectUser(b.dataset.id))}
 $("userSearch").oninput=e=>{const q=e.target.value.toLowerCase();renderUsers(allProfiles.filter(u=>(u.full_name||"").toLowerCase().includes(q)||(u.email||"").toLowerCase().includes(q)))}
@@ -72,11 +86,33 @@ async function selectUser(id){selectedUser=allProfiles.find(x=>x.id===id);if(!se
 async function loadMessages(){if(!selectedUser)return;const {data,error}=await sb.from("messages").select("id,sender_id,receiver_id,body,created_at").or("and(sender_id.eq."+currentUser.id+",receiver_id.eq."+selectedUser.id+"),and(sender_id.eq."+selectedUser.id+",receiver_id.eq."+currentUser.id+")").order("created_at");if(error){$("messages").innerHTML='<div class="empty"><p>Unable to load messages. Check your Supabase chat tables and policies.</p></div>';return}renderMessages(data||[])}
 function renderMessages(rows){$("messages").innerHTML=rows.length?rows.map(m=>'<div class="bubble '+(m.sender_id===currentUser.id?"mine":"theirs")+'">'+escapeHtml(m.body).replace(/\n/g,"<br>")+'<small>'+fmtTime(m.created_at)+'</small></div>').join(""):'<div class="empty"><i class="fa-solid fa-message"></i><h2>Start the conversation</h2><p>Send the first message to '+escapeHtml(selectedUser.full_name||selectedUser.email)+'.</p></div>';$("messages").scrollTop=$("messages").scrollHeight}
 $("composer").onsubmit=async e=>{e.preventDefault();const body=$("messageInput").value.trim();if(!body||!selectedUser)return;const {error}=await sb.from("messages").insert({sender_id:currentUser.id,receiver_id:selectedUser.id,body});if(error){alert(error.message);return}$("messageInput").value=""}
-$("logoutBtn").onclick=async()=>{if(sb)await sb.auth.signOut();selectedUser=null;$("chatShell").classList.remove("mobile-chat")}
+$("logoutBtn").onclick=async()=>{
+ if(sb)await sb.auth.signOut();
+ if(realtimeChannel)sb.removeChannel(realtimeChannel);
+ if(profilesChannel)sb.removeChannel(profilesChannel);
+ realtimeChannel=null;profilesChannel=null;selectedUser=null;
+ $("chatShell").classList.remove("mobile-chat");
+}
 $("backBtn").onclick=()=>{$("chatShell").classList.remove("mobile-chat")}
 async function markOnline(){if(!currentUser)return;await sb.from("chat_profiles").update({last_seen:new Date().toISOString()}).eq("id",currentUser.id)}
-function subscribeProfiles(){sb.channel("chat-profiles-presence").on("postgres_changes",{event:"UPDATE",schema:"public",table:"chat_profiles"},()=>loadProfiles()).subscribe()}
-function subscribeMessages(){if(realtimeChannel)sb.removeChannel(realtimeChannel);realtimeChannel=sb.channel("messages-live").on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},payload=>{const m=payload.new;if(selectedUser&&((m.sender_id===currentUser.id&&m.receiver_id===selectedUser.id)||(m.sender_id===selectedUser.id&&m.receiver_id===currentUser.id)))loadMessages()}).subscribe()}
+function subscribeProfiles(){
+ if(profilesChannel)sb.removeChannel(profilesChannel);
+ profilesChannel=sb.channel("chat-profiles-presence").on("postgres_changes",{event:"UPDATE",schema:"public",table:"chat_profiles"},payload=>{
+   const changed=payload.new;
+   if(changed?.id===currentUser?.id)return;
+   const i=allProfiles.findIndex(x=>x.id===changed.id);
+   if(i>=0){allProfiles[i]={...allProfiles[i],...changed};renderUsers(allProfiles);}
+ }).subscribe();
+}
+function subscribeMessages(){
+ if(realtimeChannel)sb.removeChannel(realtimeChannel);
+ realtimeChannel=sb.channel("messages-live")
+ .on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},payload=>{
+   const m=payload.new;
+   if(selectedUser&&((m.sender_id===currentUser.id&&m.receiver_id===selectedUser.id)||(m.sender_id===selectedUser.id&&m.receiver_id===currentUser.id)))loadMessages();
+ })
+ .subscribe();
+}
 init();
 </script>
 </body>
