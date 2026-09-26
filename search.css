@@ -1,0 +1,93 @@
+/* Working marketplace search */
+.marketplace-search{
+position:relative;
+flex:1;
+min-width:0;
+}
+.search-box-premium{overflow:visible;position:relative}
+.search-clear{
+width:34px;
+height:34px;
+margin-right:6px;
+border:0;
+border-radius:10px;
+background:rgba(255,255,255,.08);
+color:#e2e8f0;
+cursor:pointer;
+display:grid;
+place-items:center;
+}
+.search-clear[hidden]{display:none !important}
+.search-live-status{
+min-height:18px;
+margin:8px 0 0;
+color:#8cecff;
+font-size:12px;
+font-weight:700;
+}
+.search-suggestions{
+position:absolute;
+left:0;
+right:0;
+top:calc(100% + 8px);
+z-index:30;
+display:grid;
+gap:6px;
+padding:8px;
+border:1px solid rgba(255,255,255,.12);
+border-radius:16px;
+background:rgba(8,12,30,.96);
+box-shadow:0 18px 40px rgba(0,0,0,.35);
+}
+.search-suggestions[hidden]{display:none}
+.search-suggestion{
+width:100%;
+display:flex;
+align-items:center;
+gap:12px;
+padding:10px 12px;
+border:0;
+border-radius:12px;
+background:rgba(255,255,255,.04);
+color:#fff;
+text-align:left;
+cursor:pointer;
+}
+.search-suggestion:hover{background:rgba(124,58,237,.28)}
+.search-suggestion i{
+width:32px;height:32px;display:grid;place-items:center;
+border-radius:10px;
+background:linear-gradient(135deg,#ff0080,#7c3aed,#0070f3);
+}
+.search-suggestion strong{display:block;font-size:14px}
+.search-suggestion small{display:block;color:#94a3b8;font-size:11px;margin-top:2px}
+.shop-card.is-search-match{
+outline:2px solid rgba(140,236,255,.55);
+box-shadow:0 0 0 4px rgba(124,58,237,.18);
+}
+.search-empty{
+width:min(640px,92%);
+margin:10px auto 0;
+padding:28px 20px;
+text-align:center;
+border:1px dashed rgba(255,255,255,.18);
+border-radius:20px;
+background:rgba(255,255,255,.03);
+}
+.search-empty i{font-size:28px;color:#8cecff;margin-bottom:10px}
+.search-empty h3{margin:0 0 8px}
+.search-empty p{margin:0 0 16px;color:#94a3b8}
+.search-empty button{
+border:0;
+border-radius:12px;
+padding:10px 16px;
+color:#fff;
+font-weight:800;
+cursor:pointer;
+background:linear-gradient(135deg,#ff0080,#7c3aed,#0070f3);
+}
+body.light-mode .search-suggestions{background:#fff;border-color:#e5e7eb}
+body.light-mode .search-suggestion{background:#f8fafc;color:#172033}
+body.light-mode .search-live-status{color:#2563eb}
+body.light-mode .search-empty{background:#f8fafc;border-color:#dbe3ef}
+body.light-mode .search-clear{background:#eef2ff;color:#334155}
