@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Chats | CHRISXCHANGE</title>
+<link rel="icon" type="image/svg+xml" href="assets/chrisxchange-logo.svg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#070711;--panel:rgba(18,18,32,.88);--panel2:rgba(255,255,255,.06);--line:rgba(255,255,255,.1);--text:#fff;--muted:#a7a7bb;--pink:#ff3cac;--cyan:#4cc9f0;--green:#39e58c}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at 10% 10%,rgba(255,60,172,.18),transparent 28%),radial-gradient(circle at 90% 90%,rgba(76,201,240,.14),transparent 30%),var(--bg);color:var(--text);min-height:100vh}
+button,input{font:inherit}.hidden{display:none!important}
+.topbar{height:72px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:rgba(7,7,17,.8);backdrop-filter:blur(18px);position:sticky;top:0;z-index:10}.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:900;letter-spacing:.5px}.brand img{width:42px;height:42px}.brand span span{color:var(--cyan)}
+.top-actions{display:flex;gap:10px;align-items:center}.ghost,.primary{border:1px solid var(--line);background:var(--panel2);color:#fff;border-radius:14px;padding:10px 15px;cursor:pointer}.primary{border:0;background:linear-gradient(135deg,var(--pink),#7c3aed 55%,var(--cyan));font-weight:800}.ghost:hover,.primary:hover{transform:translateY(-1px)}
+.auth-wrap{min-height:calc(100vh - 72px);display:grid;place-items:center;padding:28px}.auth-card{width:min(440px,100%);padding:30px;border:1px solid var(--line);background:var(--panel);border-radius:28px;box-shadow:0 25px 80px rgba(0,0,0,.4);backdrop-filter:blur(22px)}.auth-logo{display:block;width:76px;margin:0 auto 14px}.auth-card h1{text-align:center;font-size:30px}.auth-card>p{text-align:center;color:var(--muted);margin:8px 0 24px}.field{margin:14px 0}.field label{display:block;color:#ddd;font-size:13px;font-weight:700;margin-bottom:7px}.field input{width:100%;padding:13px 14px;border-radius:13px;border:1px solid var(--line);background:#0c0c18;color:#fff;outline:none}.field input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(76,201,240,.1)}.auth-card .primary{width:100%;padding:13px}.switch{text-align:center;margin-top:18px;color:var(--muted);font-size:14px}.switch button{background:none;border:0;color:var(--cyan);cursor:pointer;font-weight:800}.status{margin-top:14px;padding:11px;border-radius:12px;font-size:13px;display:none}.status.show{display:block}.status.error{background:rgba(255,70,100,.12);color:#ff9eae}.status.ok{background:rgba(57,229,140,.1);color:#8bffc2}
+.chat-shell{height:calc(100vh - 72px);display:grid;grid-template-columns:330px 1fr;max-width:1400px;margin:auto}.sidebar{border-right:1px solid var(--line);background:rgba(10,10,20,.7);display:flex;flex-direction:column}.side-head{padding:18px;border-bottom:1px solid var(--line)}.side-head h2{font-size:22px}.search{margin-top:13px;position:relative}.search i{position:absolute;left:13px;top:13px;color:var(--muted)}.search input{width:100%;padding:11px 12px 11px 37px;border:1px solid var(--line);border-radius:13px;background:var(--panel2);color:#fff;outline:none}.users{overflow:auto}.user{width:100%;display:flex;gap:11px;padding:13px 16px;background:none;border:0;border-bottom:1px solid rgba(255,255,255,.05);color:#fff;text-align:left;cursor:pointer}.user:hover,.user.active{background:rgba(255,255,255,.07)}.avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,var(--pink),#7c3aed,var(--cyan));font-weight:900}.user-main{min-width:0;flex:1}.user-line{display:flex;justify-content:space-between;gap:8px}.user-line strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.time{font-size:11px;color:var(--muted)}.preview{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:4px}.online{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px}.chat{display:flex;flex-direction:column;min-width:0}.chat-head{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 20px;gap:12px;background:rgba(10,10,20,.65)}.chat-head .avatar{width:43px;height:43px}.chat-head h3{font-size:16px}.chat-head p{font-size:12px;color:var(--muted);margin-top:3px}.messages{flex:1;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:8px;background:linear-gradient(rgba(7,7,17,.78),rgba(7,7,17,.92))}.empty{margin:auto;text-align:center;color:var(--muted);max-width:420px}.empty i{font-size:48px;margin-bottom:15px;background:linear-gradient(135deg,var(--pink),var(--cyan));-webkit-background-clip:text;color:transparent}.bubble{max-width:min(72%,560px);padding:10px 13px;border-radius:17px;line-height:1.4;font-size:14px;word-wrap:break-word}.mine{align-self:flex-end;background:linear-gradient(135deg,#8b2be2,#d62976);border-bottom-right-radius:5px}.theirs{align-self:flex-start;background:#171727;border:1px solid var(--line);border-bottom-left-radius:5px}.bubble small{display:block;color:rgba(255,255,255,.62);font-size:10px;text-align:right;margin-top:4px}.composer{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;background:rgba(10,10,20,.8)}.composer input{flex:1;padding:13px 15px;border-radius:15px;border:1px solid var(--line);background:var(--panel2);color:#fff;outline:none}.composer button{width:48px;border:0;border-radius:15px;background:linear-gradient(135deg,var(--pink),var(--cyan));color:#fff;cursor:pointer}
+.setup{margin:14px;padding:12px;border:1px solid rgba(255,193,7,.25);background:rgba(255,193,7,.07);border-radius:13px;color:#ffe49b;font-size:12px;line-height:1.5}
+@media(max-width:760px){.topbar{padding:0 13px}.chat-shell{grid-template-columns:1fr}.sidebar{display:flex}.chat{display:none}.chat-shell.mobile-chat .sidebar{display:none}.chat-shell.mobile-chat .chat{display:flex}.chat-head{padding:0 12px}.messages{padding:16px}.bubble{max-width:85%}.mobile-back{display:inline-flex!important}.brand span{display:none}}
+.mobile-back{display:none;background:none;border:0;color:#fff;font-size:20px}
+</style>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="index.html"><img src="assets/chrisxchange-logo.svg" alt=""><span>CHRIS<span>XCHANGE</span> CHATS</span></a><div class="top-actions"><a class="ghost" href="index.html"><i class="fa-solid fa-house"></i> Home</a><button id="logoutBtn" class="primary hidden"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></div></header>
+<section id="authView" class="auth-wrap"><div class="auth-card">
+<img class="auth-logo" src="assets/chrisxchange-logo.svg" alt="CHRISXCHANGE">
+<h1 id="authTitle">Welcome to Chats</h1><p id="authSubtitle">Sign in with your email to message people on CHRISXCHANGE.</p>
+<form id="authForm"><div class="field"><label>Full name <span id="nameLabel">(new accounts)</span></label><input id="name" autocomplete="name"></div><div class="field"><label>Email</label><input id="email" type="email" required autocomplete="email"></div><div class="field"><label>Password</label><input id="password" type="password" required minlength="6" autocomplete="current-password"></div><button class="primary" type="submit" id="authBtn">Sign In</button></form>
+<div id="authStatus" class="status"></div><div class="switch"><span id="switchText">New here?</span> <button type="button" id="switchBtn">Create an account</button></div>
+<div class="setup" id="setupNotice"><strong>One-time setup:</strong> add your Supabase publishable/anon key in this page's configuration. The project URL is already prepared for your CHRISXCHANGE Supabase project.</div>
+</div></section>
+<main id="chatShell" class="chat-shell hidden">
+<aside class="sidebar"><div class="side-head"><h2>Messages</h2><div class="search"><i class="fa-solid fa-magnifying-glass"></i><input id="userSearch" placeholder="Search people"></div></div><div id="users" class="users"></div></aside>
+<section class="chat"><header class="chat-head"><button class="mobile-back" id="backBtn"><i class="fa-solid fa-arrow-left"></i></button><div class="avatar" id="chatAvatar">?</div><div><h3 id="chatName">Select a person</h3><p id="chatStatus">Choose someone from your contacts</p></div></header><div id="messages" class="messages"><div class="empty"><i class="fa-solid fa-comments"></i><h2>Private CHRISXCHANGE Chats</h2><p>Choose a person to start a conversation. Your messages are stored securely in Supabase.</p></div></div><form id="composer" class="composer hidden"><input id="messageInput" maxlength="4000" placeholder="Type a message..." autocomplete="off"><button type="submit" aria-label="Send"><i class="fa-solid fa-paper-plane"></i></button></form></section>
+</main>
+<script>
+const SUPABASE_URL="https://wopjohlkjhqymhjjxqgi.supabase.co";
+const SUPABASE_KEY="PASTE_YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY_HERE";
+let sb=null,currentUser=null,selectedUser=null,allProfiles=[],realtimeChannel=null,signingUp=false;
+const $=id=>document.getElementById(id);
+const configured=!SUPABASE_KEY.includes("PASTE_YOUR");
+function status(msg,type="error"){const el=$("authStatus");el.textContent=msg;el.className="status show "+type}
+function initials(name="User"){return name.trim().split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase()||"U"}
+function fmtTime(v){return new Date(v).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}
+function fmtDay(v){return new Date(v).toLocaleDateString([],{month:"short",day:"numeric"})}
+function showAuth(){ $("authView").classList.remove("hidden");$("chatShell").classList.add("hidden");$("logoutBtn").classList.add("hidden")}
+function showChat(){ $("authView").classList.add("hidden");$("chatShell").classList.remove("hidden");$("logoutBtn").classList.remove("hidden");loadProfiles()}
+function setMode(){signingUp=!signingUp;$("name").required=signingUp;$("nameLabel").textContent=signingUp?"":"(new accounts)";$("authTitle").textContent=signingUp?"Create your chat account":"Welcome to Chats";$("authSubtitle").textContent=signingUp?"Use your email to join CHRISXCHANGE Chats.":"Sign in with your email to message people on CHRISXCHANGE.";$("authBtn").textContent=signingUp?"Create Account":"Sign In";$("switchText").textContent=signingUp?"Already registered?":"New here?";$("switchBtn").textContent=signingUp?"Sign in":"Create an account"}
+$("switchBtn").onclick=setMode;
+async function init(){
+ if(!configured){$("setupNotice").classList.remove("hidden");$("authForm").querySelector("button").disabled=true;return}
+ sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);$("setupNotice").classList.add("hidden");
+ const {data}=await sb.auth.getSession();if(data.session){currentUser=data.session.user;showChat()}
+ sb.auth.onAuthStateChange(async(_e,session)=>{currentUser=session?.user||null;if(currentUser)showChat();else showAuth()});
+}
+$("authForm").onsubmit=async e=>{e.preventDefault();if(!sb)return status("Add your Supabase publishable/anon key first.");status("Working...","ok");
+ const email=$("email").value.trim().toLowerCase(),password=$("password").value,name=$("name").value.trim();
+ if(signingUp){const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});if(error)return status(error.message);if(data.session){await ensureProfile(name);status("Account created.","ok")}else status("Account created. Check your email to confirm, then sign in.","ok")}
+ else{const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)return status(error.message);currentUser=data.user;showChat()}
+};
+async function ensureProfile(name){if(!currentUser)return;await sb.from("profiles").upsert({id:currentUser.id,full_name:name||currentUser.user_metadata?.full_name||currentUser.email.split("@")[0],email:currentUser.email},{onConflict:"id"})}
+async function loadProfiles(){
+ await ensureProfile(currentUser.user_metadata?.full_name||"");
+ const {data,error}=await sb.from("profiles").select("id,full_name,email,last_seen").neq("id",currentUser.id).order("full_name");
+ if(error){$("users").innerHTML='<div class="setup">Create the chat tables using <b>supabase-chat.sql</b> in your Supabase SQL Editor.</div>';return}
+ allProfiles=data||[];renderUsers(allProfiles);await markOnline();subscribeProfiles();subscribeMessages();
+}
+function renderUsers(list){$("users").innerHTML=list.length?list.map(u=>'<button class="user" data-id="'+u.id+'"><span class="avatar">'+initials(u.full_name||u.email)+'</span><span class="user-main"><span class="user-line"><strong>'+escapeHtml(u.full_name||u.email)+'</strong><span class="time">'+(u.last_seen?fmtDay(u.last_seen):"")+'</span></span><span class="preview"><span class="online"></span>CHRISXCHANGE member</span></span></button>').join(""):'<div class="setup">No other registered users yet.</div>';document.querySelectorAll(".user").forEach(b=>b.onclick=()=>selectUser(b.dataset.id))}
+$("userSearch").oninput=e=>{const q=e.target.value.toLowerCase();renderUsers(allProfiles.filter(u=>(u.full_name||"").toLowerCase().includes(q)||(u.email||"").toLowerCase().includes(q)))}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+async function selectUser(id){selectedUser=allProfiles.find(x=>x.id===id);if(!selectedUser)return;$("chatShell").classList.add("mobile-chat");$("chatName").textContent=selectedUser.full_name||selectedUser.email;$("chatStatus").innerHTML='<span class="online"></span>CHRISXCHANGE member';$("chatAvatar").textContent=initials(selectedUser.full_name||selectedUser.email);$("composer").classList.remove("hidden");await loadMessages()}
+async function loadMessages(){if(!selectedUser)return;const {data,error}=await sb.from("messages").select("id,sender_id,receiver_id,body,created_at").or("and(sender_id.eq."+currentUser.id+",receiver_id.eq."+selectedUser.id+"),and(sender_id.eq."+selectedUser.id+",receiver_id.eq."+currentUser.id+")").order("created_at");if(error){$("messages").innerHTML='<div class="empty"><p>Unable to load messages. Check your Supabase chat tables and policies.</p></div>';return}renderMessages(data||[])}
+function renderMessages(rows){$("messages").innerHTML=rows.length?rows.map(m=>'<div class="bubble '+(m.sender_id===currentUser.id?"mine":"theirs")+'">'+escapeHtml(m.body).replace(/\n/g,"<br>")+'<small>'+fmtTime(m.created_at)+'</small></div>').join(""):'<div class="empty"><i class="fa-solid fa-message"></i><h2>Start the conversation</h2><p>Send the first message to '+escapeHtml(selectedUser.full_name||selectedUser.email)+'.</p></div>';$("messages").scrollTop=$("messages").scrollHeight}
+$("composer").onsubmit=async e=>{e.preventDefault();const body=$("messageInput").value.trim();if(!body||!selectedUser)return;const {error}=await sb.from("messages").insert({sender_id:currentUser.id,receiver_id:selectedUser.id,body});if(error){alert(error.message);return}$("messageInput").value=""}
+$("logoutBtn").onclick=async()=>{if(sb)await sb.auth.signOut();selectedUser=null;$("chatShell").classList.remove("mobile-chat")}
+$("backBtn").onclick=()=>{$("chatShell").classList.remove("mobile-chat")}
+async function markOnline(){if(!currentUser)return;await sb.from("profiles").update({last_seen:new Date().toISOString()}).eq("id",currentUser.id)}
+function subscribeProfiles(){sb.channel("profiles-presence").on("postgres_changes",{event:"UPDATE",schema:"public",table:"profiles"},()=>loadProfiles()).subscribe()}
+function subscribeMessages(){if(realtimeChannel)sb.removeChannel(realtimeChannel);realtimeChannel=sb.channel("messages-live").on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},payload=>{const m=payload.new;if(selectedUser&&((m.sender_id===currentUser.id&&m.receiver_id===selectedUser.id)||(m.sender_id===selectedUser.id&&m.receiver_id===currentUser.id)))loadMessages()}).subscribe()}
+init();
+</script>
+</body>
+</html>
