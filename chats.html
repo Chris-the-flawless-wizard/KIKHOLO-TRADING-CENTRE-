@@ -35,10 +35,10 @@ button,input{font:inherit}.hidden{display:none!important}
 </main>
 <script>
 const SUPABASE_URL="https://wopjohlkjhqymhjjxqgi.supabase.co";
-const SUPABASE_KEY="PASTE_YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY_HERE";
+const SUPABASE_KEY="sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD";
 let sb=null,currentUser=null,selectedUser=null,allProfiles=[],realtimeChannel=null,signingUp=false;
 const $=id=>document.getElementById(id);
-const configured=!SUPABASE_KEY.includes("PASTE_YOUR");
+const configured=Boolean(SUPABASE_KEY);
 function status(msg,type="error"){const el=$("authStatus");el.textContent=msg;el.className="status show "+type}
 function initials(name="User"){return name.trim().split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase()||"U"}
 function fmtTime(v){return new Date(v).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}
@@ -53,15 +53,15 @@ async function init(){
  const {data}=await sb.auth.getSession();if(data.session){currentUser=data.session.user;showChat()}
  sb.auth.onAuthStateChange(async(_e,session)=>{currentUser=session?.user||null;if(currentUser)showChat();else showAuth()});
 }
-$("authForm").onsubmit=async e=>{e.preventDefault();if(!sb)return status("Add your Supabase publishable/anon key first.");status("Working...","ok");
+$("authForm").onsubmit=async e=>{e.preventDefault();if(!sb)return status("CHRISXCHANGE Supabase connection is not configured.");status("Working...","ok");
  const email=$("email").value.trim().toLowerCase(),password=$("password").value,name=$("name").value.trim();
  if(signingUp){const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});if(error)return status(error.message);if(data.session){await ensureProfile(name);status("Account created.","ok")}else status("Account created. Check your email to confirm, then sign in.","ok")}
  else{const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)return status(error.message);currentUser=data.user;showChat()}
 };
-async function ensureProfile(name){if(!currentUser)return;await sb.from("profiles").upsert({id:currentUser.id,full_name:name||currentUser.user_metadata?.full_name||currentUser.email.split("@")[0],email:currentUser.email},{onConflict:"id"})}
+async function ensureProfile(name){if(!currentUser)return;await sb.from("chat_profiles").upsert({id:currentUser.id,full_name:name||currentUser.user_metadata?.full_name||currentUser.email.split("@")[0],email:currentUser.email},{onConflict:"id"})}
 async function loadProfiles(){
  await ensureProfile(currentUser.user_metadata?.full_name||"");
- const {data,error}=await sb.from("profiles").select("id,full_name,email,last_seen").neq("id",currentUser.id).order("full_name");
+ const {data,error}=await sb.from("chat_profiles").select("id,full_name,email,last_seen").neq("id",currentUser.id).order("full_name");
  if(error){$("users").innerHTML='<div class="setup">Create the chat tables using <b>supabase-chat.sql</b> in your Supabase SQL Editor.</div>';return}
  allProfiles=data||[];renderUsers(allProfiles);await markOnline();subscribeProfiles();subscribeMessages();
 }
@@ -74,8 +74,8 @@ function renderMessages(rows){$("messages").innerHTML=rows.length?rows.map(m=>'<
 $("composer").onsubmit=async e=>{e.preventDefault();const body=$("messageInput").value.trim();if(!body||!selectedUser)return;const {error}=await sb.from("messages").insert({sender_id:currentUser.id,receiver_id:selectedUser.id,body});if(error){alert(error.message);return}$("messageInput").value=""}
 $("logoutBtn").onclick=async()=>{if(sb)await sb.auth.signOut();selectedUser=null;$("chatShell").classList.remove("mobile-chat")}
 $("backBtn").onclick=()=>{$("chatShell").classList.remove("mobile-chat")}
-async function markOnline(){if(!currentUser)return;await sb.from("profiles").update({last_seen:new Date().toISOString()}).eq("id",currentUser.id)}
-function subscribeProfiles(){sb.channel("profiles-presence").on("postgres_changes",{event:"UPDATE",schema:"public",table:"profiles"},()=>loadProfiles()).subscribe()}
+async function markOnline(){if(!currentUser)return;await sb.from("chat_profiles").update({last_seen:new Date().toISOString()}).eq("id",currentUser.id)}
+function subscribeProfiles(){sb.channel("chat-profiles-presence").on("postgres_changes",{event:"UPDATE",schema:"public",table:"chat_profiles"},()=>loadProfiles()).subscribe()}
 function subscribeMessages(){if(realtimeChannel)sb.removeChannel(realtimeChannel);realtimeChannel=sb.channel("messages-live").on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},payload=>{const m=payload.new;if(selectedUser&&((m.sender_id===currentUser.id&&m.receiver_id===selectedUser.id)||(m.sender_id===selectedUser.id&&m.receiver_id===currentUser.id)))loadMessages()}).subscribe()}
 init();
 </script>
