@@ -45,7 +45,7 @@ function escapeHtml(v) {
         "&": "&",
         "<": "<",
         ">": ">",
-        '"': """,
+        '"': "&quot;",
         "'": "&#039;"
     }[m]));
 }
@@ -133,6 +133,36 @@ async function fetchJson(url) {
     return res.json();
 }
 
+async function loadSupabaseProducts() {
+    try {
+        const sb = window.supabase?.createClient(
+            "https://wopjohlkjhqymhjjxqgi.supabase.co",
+            "sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD"
+        );
+        if (!sb) return [];
+        const { data, error } = await sb
+            .from("products")
+            .select("category_name,product_name,description,price,currency,image_url,source_url,availability,featured");
+        if (error || !Array.isArray(data)) return [];
+        return data.filter(p => p.product_name).map((p, i) => ({
+            id: "supabase-" + i,
+            name: p.product_name,
+            description: p.description || "Available on CHRISXCHANGE.",
+            price: Number(p.price) || 0,
+            currency: p.currency || "UGX",
+            image_url: p.image_url || "",
+            category: mapCategory(p.category_name || p.product_name),
+            seller: "CHRISXCHANGE Marketplace",
+            source: p.source_url || "CHRISXCHANGE",
+            stock_quantity: 20,
+            is_available: String(p.availability || "").toLowerCase() !== "out of stock",
+            is_featured: ["true","yes","1"].includes(String(p.featured).toLowerCase())
+        }));
+    } catch (e) {
+        return [];
+    }
+}
+
 async function loadOnlineProducts() {
     const results = await Promise.allSettled([
         fetchJson("https://dummyjson.com/products?limit=100"),
@@ -146,7 +176,8 @@ async function loadOnlineProducts() {
     dummy.forEach((item, i) => online.push(normalizeProduct(item, i, "dummyjson")));
     fake.forEach((item, i) => online.push(normalizeProduct(item, i, "fakestore")));
 
-    const merged = online.concat(FALLBACK_PRODUCTS);
+    const dbProducts = await loadSupabaseProducts();
+    const merged = dbProducts.length ? dbProducts.concat(FALLBACK_PRODUCTS) : online.concat(FALLBACK_PRODUCTS);
     const unique = [];
     const seen = new Set();
     merged.forEach(p => {
