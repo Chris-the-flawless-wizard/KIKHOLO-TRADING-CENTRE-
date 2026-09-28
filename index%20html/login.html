@@ -26,7 +26,7 @@ document.getElementById("resetBtn").addEventListener("click",async()=>{
  const address=email.value.trim().toLowerCase();
  if(!address){message.style.color="#dc2626";message.textContent="Enter your email address first.";email.focus();return;}
  message.style.color="#64748b";message.textContent="Sending password-reset email...";
- const {error}=await sb.auth.resetPasswordForEmail(address,{redirectTo:location.origin+"/index%20html/reset-password.html"});
+ const {error}=await sb.auth.resetPasswordForEmail(address,{redirectTo:"https://kikholo-trading-centre.vercel.app/"});
  if(error){message.style.color="#dc2626";message.textContent=error.message;return;}
  message.style.color="#16a34a";message.textContent="If this account exists, check your email for the password-reset link.";
 });
