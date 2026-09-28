@@ -1,303 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Create Account | CHRISXCHANGE</title>
-<link rel="icon" type="image/svg+xml" href="../assets/chrisxchange-logo.svg">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI,sans-serif;
-}
-
-body{
-background:#f4f6f9;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
-
-.register-box{
-
-width:450px;
-
-background:white;
-
-padding:35px;
-
-border-radius:15px;
-
-box-shadow:0 10px 25px rgba(0,0,0,.2);
-
-}
-
-.register-box h2{
-
-text-align:center;
-
-margin-bottom:25px;
-
-color:#003366;
-
-}
-
-.input-group{
-
-margin-bottom:18px;
-
-}
-
-.input-group label{
-
-display:block;
-
-margin-bottom:6px;
-
-font-weight:bold;
-
-}
-
-.input-group input{
-
-width:100%;
-
-padding:12px;
-
-border:1px solid #ccc;
-
-border-radius:8px;
-
-font-size:16px;
-
-}
-
-button{
-
-width:100%;
-
-padding:14px;
-
-background:#0077ff;
-
-color:white;
-
-border:none;
-
-border-radius:8px;
-
-font-size:18px;
-
-cursor:pointer;
-
-}
-
-button:hover{
-
-background:#005fd1;
-
-}
-
-.message{
-
-margin-top:20px;
-
-display:none;
-
-padding:12px;
-
-text-align:center;
-
-border-radius:8px;
-
-font-weight:bold;
-
-}
-
-.success{
-
-background:#d4edda;
-
-color:#155724;
-
-}
-
-.error{
-
-background:#f8d7da;
-
-color:#721c24;
-
-}
-
-.login{
-
-margin-top:20px;
-
-text-align:center;
-
-}
-
-.login a{
-
-text-decoration:none;
-
-color:#0077ff;
-
-font-weight:bold;
-
-}
-
-</style>
-
+<link rel="stylesheet" href="../style.css"><link rel="icon" type="image/svg+xml" href="../assets/chrisxchange-logo.svg">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
-
-<div class="register-box">
-
-<img class="site-logo" src="../assets/chrisxchange-logo.svg" alt="CHRISXCHANGE logo">
-
-<h2>Create Account</h2>
-
-<form id="registerForm">
-
-<div class="input-group">
-
-<label>Full Name</label>
-
-<input type="text" id="name" required>
-
-</div>
-
-<div class="input-group">
-
-<label>Email Address</label>
-
-<input type="email" id="email" required>
-
-</div>
-
-<div class="input-group">
-
-<label>Password</label>
-
-<input type="password" id="password" required>
-
-</div>
-
-<div class="input-group">
-
-<label>Confirm Password</label>
-
-<input type="password" id="confirm" required>
-
-</div>
-
-<button type="submit">
-
-Create Account
-
-</button>
-
-</form>
-
-<div id="message" class="message"></div>
-
-<div class="login">
-
-Already have an account?
-
-<a href="login.html">
-
-Login
-
-</a>
-
-</div>
-
-</div>
-
+<main style="min-height:100vh;display:grid;place-items:center;padding:30px">
+<form id="registerForm" style="width:min(460px,100%);background:rgba(255,255,255,.96);color:#111827;padding:38px;border-radius:28px;box-shadow:0 25px 70px rgba(0,0,0,.25)">
+<div style="text-align:center"><img src="../assets/chrisxchange-logo.svg" style="width:72px" alt="CHRISXCHANGE"><h1>Create Account</h1><p>Join the CHRISXCHANGE marketplace.</p></div>
+<input id="name" required autocomplete="name" placeholder="Full name" style="width:100%;padding:14px;margin:7px 0;border:1px solid #d1d5db;border-radius:12px">
+<input id="email" required autocomplete="email" type="email" placeholder="Email address" style="width:100%;padding:14px;margin:7px 0;border:1px solid #d1d5db;border-radius:12px">
+<input id="password" required autocomplete="new-password" type="password" minlength="6" placeholder="Password (6+ characters)" style="width:100%;padding:14px;margin:7px 0;border:1px solid #d1d5db;border-radius:12px">
+<input id="confirm" required autocomplete="new-password" type="password" minlength="6" placeholder="Confirm password" style="width:100%;padding:14px;margin:7px 0;border:1px solid #d1d5db;border-radius:12px">
+<button type="submit" style="width:100%;margin-top:15px;padding:14px;border:0;border-radius:14px;background:linear-gradient(135deg,#ff0080,#7c3aed,#0070f3);color:white;font-weight:800">Create Account</button>
+<p id="message" style="text-align:center;font-size:13px;min-height:40px"></p>
+<a href="login.html">Already have an account? Log in</a><br><a href="../index.html">← Back to CHRISXCHANGE</a>
+</form></main>
 <script>
-
-document.getElementById("registerForm").addEventListener("submit",function(e){
-
-e.preventDefault();
-
-let name=document.getElementById("name").value;
-
-let email=document.getElementById("email").value;
-
-let password=document.getElementById("password").value;
-
-let confirm=document.getElementById("confirm").value;
-
-let message=document.getElementById("message");
-
-if(password!==confirm){
-
-message.style.display="block";
-
-message.className="message error";
-
-message.innerHTML="Passwords do not match.";
-
-return;
-
-}
-
-let users=JSON.parse(localStorage.getItem("users"))||[];
-
-let exists=users.find(user=>user.email===email);
-
-if(exists){
-
-message.style.display="block";
-
-message.className="message error";
-
-message.innerHTML="Email already registered.";
-
-return;
-
-}
-
-users.push({
-
-name:name,
-
-email:email,
-
-password:password
-
+const sb=window.supabase.createClient("https://wopjohlkjhqymhjjxqgi.supabase.co","sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD",{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const form=document.getElementById("registerForm"),message=document.getElementById("message");
+form.addEventListener("submit",async e=>{
+ e.preventDefault(); const name=document.getElementById("name").value.trim(),email=document.getElementById("email").value.trim().toLowerCase(),password=document.getElementById("password").value,confirm=document.getElementById("confirm").value;
+ if(password!==confirm){message.style.color="#dc2626";message.textContent="Passwords do not match.";return;}
+ message.style.color="#64748b";message.textContent="Creating account...";
+ const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name}}});
+ if(error){message.style.color="#dc2626";message.textContent=error.message;return;}
+ if(data.session){message.style.color="#16a34a";message.textContent="Account created. Opening CHRISXCHANGE...";setTimeout(()=>location.href="../index.html",300);}
+ else{message.style.color="#16a34a";message.textContent="Account created. Check your email to confirm your account, then log in.";}
 });
-
-localStorage.setItem("users",JSON.stringify(users));
-
-message.style.display="block";
-
-message.className="message success";
-
-message.innerHTML="Account created successfully. Redirecting to login...";
-
-setTimeout(function(){
-
-window.location="login.html";
-
-},2000);
-
-});
-
 </script>
-
-</body>
-
-</html>
+</body></html>
