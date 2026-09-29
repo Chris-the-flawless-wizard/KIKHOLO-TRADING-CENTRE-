@@ -17,10 +17,10 @@
 <div class="reels-feed" id="reelsFeed"></div>
 <div class="reels-empty" id="emptyReels">
 <i class="fa-solid fa-clapperboard"></i><h2>No Reels Yet</h2>
-<p>Upload a video or add an original TikTok post link.</p>
+<p>Watch trade & business content, share your own short videos, and discover content from TikTok and YouTube.</p>
 <div class="empty-actions">
 <button class="primary-reel-btn" id="emptyUpload"><i class="fa-solid fa-video"></i> Upload video</button>
-<button class="secondary-reel-btn" id="openTikTok"><i class="fa-brands fa-tiktok"></i> Add TikTok</button>
+<button class="secondary-reel-btn" id="openTikTok"><i class="fa-brands fa-tiktok"></i> Add TikTok</button><button class="secondary-reel-btn youtube-empty-btn" id="openYouTube"><i class="fa-brands fa-youtube"></i> Add YouTube</button>
 </div></div>
 <div class="reel-dots-menu" id="dotsMenu" aria-hidden="true"></div>
 </main>
@@ -42,6 +42,15 @@
 <label>TikTok post URL<input id="tiktokUrl" type="url" placeholder="https://www.tiktok.com/@creator/video/..." required></label>
 <label>Caption<input id="tiktokCaption" maxlength="180" placeholder="Business, trade or product video"></label>
 <button type="submit" class="submit-reel"><i class="fa-brands fa-tiktok"></i> Add to Reels</button>
+</form></div></div>
+<div class="upload-modal" id="youtubeModal" aria-hidden="true"><div class="upload-card">
+<button class="modal-close" id="closeYouTube" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+<div class="upload-icon youtube-upload-icon"><i class="fa-brands fa-youtube"></i></div><h2>Add YouTube Reel</h2>
+<p>Paste a public YouTube video or Short URL. CHRISXCHANGE embeds the original video instead of copying it.</p>
+<form id="youtubeForm">
+<label>YouTube URL<input id="youtubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=..." required></label>
+<label>Caption<input id="youtubeCaption" maxlength="180" placeholder="Trade, business or product video"></label>
+<button type="submit" class="submit-reel"><i class="fa-brands fa-youtube"></i> Add to Reels</button>
 </form></div></div>
 <script src="script.js"></script><script src="reels.js"></script>
 </body></html>
