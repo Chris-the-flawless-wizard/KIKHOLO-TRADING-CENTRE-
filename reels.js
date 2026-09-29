@@ -3,6 +3,8 @@ const SUPABASE_URL="https://wopjohlkjhqymhjjxqgi.supabase.co";
 const SUPABASE_KEY="sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD";
 const LOGIN_URL="index%20html/login.html";
 const MAX_VIDEO=50*1024*1024;
+// Direct TikTok posts can be listed here. These are embedded from TikTok itself.
+const TIKTOK_POSTS=[];
 const DISCOVERY=[
   {platform:"youtube",query:"trade business entrepreneurship Uganda Africa",title:"Business & Trade in Africa"},
   {platform:"youtube",query:"small business trade entrepreneurship East Africa",title:"Small Business & Trade"},
@@ -65,7 +67,8 @@ function render(){
  const feed=$("#reelsFeed"),empty=$("#emptyReels");
  if(!feed)return;
  feed.innerHTML="";
- const items=[...reels,...DISCOVERY.map((d,i)=>({id:"discover-"+i,type:d.platform,discovery:true,query:d.query,creator_name:d.title,caption:"Discover fresh "+(d.platform==="youtube"?"YouTube":"TikTok")+" content about trade, business and entrepreneurship."}))];
+ const directTikToks=TIKTOK_POSTS.filter(x=>x&&x.url).map((x,i)=>({id:"tiktok-direct-"+i,type:"tiktok",discovery:false,owner_id:null,source_url:x.url,creator_name:x.creator||"TikTok creator",caption:x.caption||"Trade, business and marketplace video from TikTok."}));
+ const items=[...directTikToks,...reels,...DISCOVERY.map((d,i)=>({id:"discover-"+i,type:d.platform,discovery:true,query:d.query,creator_name:d.title,caption:"Discover fresh "+(d.platform==="youtube"?"YouTube":"TikTok")+" content about trade, business and entrepreneurship."}))];
  if(!items.length){empty.style.display="grid";return}
  empty.style.display="none";
  items.forEach((r,i)=>{const card=document.createElement("article");card.className="reel-card";card.dataset.id=r.id;card.innerHTML=r.discovery?discoveryMarkup(r):markup(r);feed.appendChild(card);if(!r.discovery)setupActions(card,r);else setupDiscovery(card,r);});
@@ -78,7 +81,11 @@ function markup(r){
  const mediaWrap=r.type==="video" ? '<div class="reel-media">'+media+'<button class="center-play" aria-label="Play"><i class="fa-solid fa-play"></i></button><button class="sound-btn" aria-label="Mute or unmute"><i class="fa-solid fa-volume-xmark"></i></button></div>' : '<div class="reel-media embed-media">'+media+'</div>';
  return mediaWrap+'<div class="reel-bottom"><div class="creator-line"><span class="avatar"><i class="'+(r.type==="tiktok"?"fa-brands fa-tiktok":"fa-solid fa-user")+'"></i></span><strong>@'+esc(r.creator_name)+'</strong></div><p>'+esc(r.caption||"")+'</p></div>'+actionsMarkup(r);
 }
-function tiktokMarkup(r){return '<blockquote class="tiktok-embed" cite="'+attr(r.source_url||"")+'" data-video-id="'+attr(tiktokId(r.source_url||""))+'"><section><a target="_blank" rel="noopener" href="'+attr(r.source_url||"")+'">@'+esc(r.creator_name)+'</a></section></blockquote>'}
+function tiktokMarkup(r){
+ const id=tiktokId(r.source_url||"");
+ if(!id)return '<div class="video-unavailable"><i class="fa-brands fa-tiktok"></i><span>Invalid TikTok video link</span></div>';
+ return '<iframe class="tiktok-frame" src="https://www.tiktok.com/player/v1/'+encodeURIComponent(id)+'?description=1&music_info=1&rel=0" title="TikTok trade video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+}
 function youtubeMarkup(r){return '<iframe class="youtube-frame" src="https://www.youtube.com/embed/'+attr(youtubeId(r.source_url||""))+'?autoplay=0&mute=1&playsinline=1&rel=0" title="YouTube trade video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>'}
 function discoveryMarkup(r){
  if(r.platform==="youtube")return '<div class="reel-media embed-media discovery-media"><iframe class="youtube-frame" src="https://www.youtube.com/embed?listType=search&list='+encodeURIComponent(r.query)+'&rel=0" title="'+attr(r.creator_name)+'" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div><div class="reel-bottom"><div class="creator-line"><span class="avatar"><i class="fa-brands fa-youtube"></i></span><strong>'+esc(r.creator_name)+'</strong></div><p>'+esc(r.caption)+'</p></div><div class="reel-discovery-link"><a href="https://www.youtube.com/results?search_query='+encodeURIComponent(r.query)+'" target="_blank" rel="noopener">Open YouTube search <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
