@@ -130,7 +130,7 @@ async function publishExternal(e,type){
  e.preventDefault();if(!me){goLogin();return}
  const url=(type==="tiktok"?$("#tiktokUrl"):$("#youtubeUrl")).value.trim(),caption=(type==="tiktok"?$("#tiktokCaption"):$("#youtubeCaption")).value.trim();
  const valid=type==="tiktok"?tiktokId(url):youtubeId(url);if(!valid){alert("Please enter a valid public "+(type==="tiktok"?"TikTok /video/":"YouTube video")+" URL.");return}
- const creator=type==="tiktok"?(url.match(/tiktok\.com\\/@([^/]+)/i)||[])[1]||"TikTok creator":"YouTube creator";
+ const creator=type==="tiktok"?(url.match(/tiktok\.com\/@([^/]+)/i)||[])[1]||"TikTok creator":"YouTube creator";
  const {error}=await sb.from("reels").insert({owner_id:me.id,type,creator_name:creator,caption,source_url:url});
  if(error){alert(error.message||"Could not add Reel.");return}
  e.target.reset();$("#"+(type==="tiktok"?"tiktokModal":"youtubeModal")).classList.remove("open");await loadFeed();
