@@ -29,35 +29,57 @@ const SUPABASE_URL="https://wopjohlkjhqymhjjxqgi.supabase.co";
 const SUPABASE_KEY="sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD";
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const form=document.getElementById("loginForm"),message=document.getElementById("message");
+
 form.addEventListener("submit",async e=>{
  e.preventDefault();
  message.style.color="#64748b";
  message.textContent="Signing in...";
+
  const email=document.getElementById("email").value.trim().toLowerCase();
  const password=document.getElementById("password").value;
+
  const {data,error}=await sb.auth.signInWithPassword({email,password});
- if(error){message.style.color="#dc2626";message.textContent=error.message;return;}
- if(!data.session){message.style.color="#dc2626";message.textContent="Login failed: no session was created.";return;}
+
+ if(error){
+   message.style.color="#dc2626";
+   message.textContent=error.message;
+   return;
+ }
+
+ if(!data.session){
+   message.style.color="#dc2626";
+   message.textContent="Login failed: no session was created.";
+   return;
+ }
+
  message.style.color="#16a34a";
- message.textContent="Login successful. Opening CHRISXCHANGE...";
- setTimeout(()=>location.href="../index.html",300);
+ message.textContent="Login successful. Opening CHRISXCHANGE Chats...";
+
+ // Successful login now opens the main CHRISXCHANGE Chats page.
+ setTimeout(()=>location.href="../chats.html",300);
 });
+
 document.getElementById("resetBtn").addEventListener("click",async()=>{
  const email=document.getElementById("email").value.trim().toLowerCase();
+
  if(!email){
    message.style.color="#dc2626";
    message.textContent="Enter your email address first.";
    document.getElementById("email").focus();
    return;
  }
+
  message.style.color="#64748b";
  message.textContent="Sending password-reset email...";
+
  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:"https://kikholo-trading-centre.vercel.app/"});
+
  if(error){
    message.style.color="#dc2626";
    message.textContent=error.message;
    return;
  }
+
  message.style.color="#16a34a";
  message.textContent="If this account exists, check your email for the password-reset link.";
 });
