@@ -183,8 +183,8 @@ function goLogin(){location.href=LOGIN_URL+"?next=reels.html"}
 function showError(msg){const f=$("#reelsFeed");if(f)f.innerHTML='<div class="feed-error"><i class="fa-solid fa-triangle-exclamation"></i><h2>Reels connection issue</h2><p>'+esc(msg)+'</p><a href="'+LOGIN_URL+'">Log in</a></div>'}
 function busy(b,on,label){if(!b)return;b.disabled=on;b.innerHTML=on?'<i class="fa-solid fa-spinner fa-spin"></i> '+label:'<i class="fa-solid fa-paper-plane"></i> '+label}
 function safeFile(n){return String(n||"video.mp4").replace(/[^a-z0-9._-]/gi,"-").slice(-120)}
-function tiktokId(u){const m=String(u).match(/tiktok\\.com\\/@[^/]+\\/video\\/(\\d+)/i);return m?m[1]:""}
-function youtubeId(u){{const m=String(u).match(/(?:youtube\.com\\/(?:watch\\?v=|shorts\\/|embed\\/)|youtu\.be\\/)([A-Za-z0-9_-]{6,})/i);return m?m[1]:""}
+function tiktokId(u){const m=String(u).match(/tiktok\.com\/@[^/]+\/video\/(\d+)/i);return m?m[1]:""}
+function youtubeId(u){const m=String(u).match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/i);return m?m[1]:""}
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function attr(v){return esc(v)}
 function $(s){return document.querySelector(s)}
