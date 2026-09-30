@@ -40,21 +40,6 @@ $("createGroup").onclick=async()=>{if(!ready)return alert("Please wait for Chats
 async function showRequests(){if(!ready)return alert("Please wait for Chats to finish connecting.");const rs=await requests();openModal('<h2>🤝 Friend Requests</h2>'+(rs.length?rs.map(r=>'<div class="item"><span class="avatar">'+initials(r.chat_profiles.full_name)+'</span><span class="info"><strong>'+esc(r.chat_profiles.full_name)+'</strong><small>'+esc(r.chat_profiles.email)+'</small></span><span class="request"><button class="accept" data-accept="'+r.id+'">Accept</button><button class="decline" data-decline="'+r.id+'">Decline</button></span></div>').join(""):'<p style="color:var(--muted)">No pending friend requests.</p>')+'<div class="modalactions"><button class="btn" id="closeReq">Close</button></div>');$("closeReq").onclick=closeModal;document.querySelectorAll("[data-accept]").forEach(b=>b.onclick=async()=>{const r=await sb.rpc("accept_friend_request",{request_id:b.dataset.accept});if(r.error)return alert(r.error.message);closeModal();await loadFriends();render()});document.querySelectorAll("[data-decline]").forEach(b=>b.onclick=async()=>{const r=await sb.rpc("decline_friend_request",{request_id:b.dataset.decline});if(r.error)return alert(r.error.message);closeModal()})}
 function subscribe(){if(!sb)return;channel=sb.channel("chrisxchange-social").on("postgres_changes",{event:"*",schema:"public",table:"messages"},()=>selected?.type==="friend"&&messages()).on("postgres_changes",{event:"*",schema:"public",table:"group_messages"},()=>selected?.type==="group"&&groupMessages()).on("postgres_changes",{event:"*",schema:"public",table:"friendships"},async()=>{await loadFriends();render()}).subscribe()}
 $("logout").onclick=async()=>{try{if(sb)await sb.auth.signOut()}finally{location.href="index%20html/login.html"}};document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
-// Bind the controls defensively so they never fail silently.
-function bindChatControls(){
-  const bindings={
-    addFriend:()=>window.__cxReady?openAddFriend():alert("Chats is still connecting. Please refresh once and try again."),
-    createGroup:()=>window.__cxReady?openCreateGroup():alert("Chats is still connecting. Please refresh once and try again."),
-    requestButton:()=>window.__cxReady?showRequests():alert("Chats is still connecting. Please refresh once and try again."),
-    sampleButton:showPreview,
-    logout:async()=>{try{if(sb)await sb.auth.signOut()}finally{location.href="index%20html/login.html"}}
-  };
-  Object.entries(bindings).forEach(([id,fn])=>{const el=$(id);if(el){el.onclick=fn;}});
-}
-window.__cxReady=false;
-function openAddFriend(){ $("addFriend").onclick && $("addFriend").onclick(); }
-function openCreateGroup(){ $("createGroup").onclick && $("createGroup").onclick(); }
-bindChatControls();
+$("requestButton").onclick=showRequests;$("sampleButton").onclick=showPreview;
 window.addEventListener("error",e=>{const l=$("list");if(l)l.insertAdjacentHTML("afterbegin",'<div class="notice">⚠️ Chat script error: '+esc(e.message)+'</div>');});
-init();
-</script></body></html>
+init();</script></body></html>
