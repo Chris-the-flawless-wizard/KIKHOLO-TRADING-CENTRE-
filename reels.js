@@ -59,7 +59,10 @@ async function loadFeed(){
   render();
  }catch(e){
   console.error(e);
-  showError("Reels could not connect to CHRISXCHANGE. The page is still available; refresh to try again.");
+  // Keep the public discovery feed visible even when Supabase is temporarily unavailable.
+  // User-created Reels still require the database connection.
+  reels=[];
+  render();
  }
 }
 
