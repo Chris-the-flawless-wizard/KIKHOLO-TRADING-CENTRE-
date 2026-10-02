@@ -42,7 +42,7 @@ input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.12)}
 <h1>Your CHRISXCHANGE account</h1>
 <p>Sign in or create an account. New accounts go straight to chats, where you can edit your profile the same way as an email account.</p>
 <div class="steps">
-<div class="step"><b>1. Create or sign in</b><span>Use your email and password. Both are on this page.</span></div>
+<div class="step"><b>1. Create or sign in</b><span>Any email can create an account or be invited. Use your email and password.</span></div>
 <div class="step"><b>2. Open chats</b><span>A new account is sent to chats, not back to the home page.</span></div>
 <div class="step"><b>3. Edit your profile</b><span>Set the name shown in chats from the profile menu.</span></div>
 </div>
@@ -64,7 +64,7 @@ input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.12)}
 <label for="name">Display name</label>
 <input id="name" required autocomplete="name" maxlength="80" placeholder="Name shown in chats">
 <label for="email">Email</label>
-<input id="email" required autocomplete="email" type="email" placeholder="you@example.com">
+<input id="email" required autocomplete="email" type="email" placeholder="any email, for example you@example.com">
 <label for="password">Password</label>
 <input id="password" required autocomplete="new-password" type="password" minlength="6" placeholder="At least 6 characters">
 <label for="confirm">Confirm password</label>
@@ -91,7 +91,7 @@ function show(mode){
 }
 document.getElementById("showLogin").onclick=()=>show("login");
 document.getElementById("showCreate").onclick=()=>show("create");
-if(location.hash==="#create")show("create");
+const preset=new URLSearchParams(location.search);if(preset.get("email")){document.getElementById("email").value=preset.get("email");show("create")}else if(location.hash==="#create")show("create");
 function goChats(setup){location.href="../chats.html"+(setup?"?setup=1":"");}
 sb.auth.getSession().then(({data})=>{if(data.session)goChats(location.hash==="#create")});
 loginForm.addEventListener("submit",async e=>{
@@ -124,11 +124,11 @@ createForm.addEventListener("submit",async e=>{
   if(password!==confirm){message.style.color="#dc2626";message.textContent="Passwords do not match.";return}
   btn.disabled=true;btn.textContent="Creating account...";
   message.style.color="#475569";message.textContent="Creating your account...";
-  const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name},emailRedirectTo:new URL("../chats.html?setup=1",location.href).href}});
+  const invitedBy=new URLSearchParams(location.search).get("inviter")||"";if(invitedBy)localStorage.setItem("cx_pending_inviter",invitedBy);const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name,invited_by:invitedBy},emailRedirectTo:new URL("../chats.html?setup=1",location.href).href}});
   if(error){btn.disabled=false;btn.textContent="Create account and open chats";message.style.color="#dc2626";message.textContent=error.message;return}
   let session=data.session;
   if(!session){const signed=await sb.auth.signInWithPassword({email,password});session=signed.data?.session||null}
-  if(session){message.style.color="#15803d";message.textContent="Account created. Opening chats so you can edit your profile...";goChats(true);return}
+  if(session){if(invitedBy&&invitedBy!==session.user.id){await sb.from("friend_requests").insert({sender_id:session.user.id,receiver_id:invitedBy})}message.style.color="#15803d";message.textContent="Account created. Opening chats so you can edit your profile...";goChats(true);return}
   message.style.color="#15803d";message.textContent="Account created. Confirm your email, then you will open chats and can edit your profile.";
   btn.disabled=false;btn.textContent="Create account and open chats";
 });
