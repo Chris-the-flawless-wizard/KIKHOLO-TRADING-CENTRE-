@@ -75,9 +75,7 @@ Product One
 Price: UGX 100,000
 </p>
 
-<button onclick="addCart()">
-Add To Cart
-</button>
+<button type="button" onclick="addCart(this)" data-name="Product One" data-price="100000">Add To Cart</button>
 
 
 </div>
@@ -96,9 +94,7 @@ Product Two
 Price: UGX 200,000
 </p>
 
-<button onclick="addCart()">
-Add To Cart
-</button>
+<button type="button" onclick="addCart(this)" data-name="Product Two" data-price="200000">Add To Cart</button>
 
 
 </div>
@@ -188,7 +184,9 @@ image.src="images/furniture.jpg";
 
 
 
-function addCart(name,price){
+function addCart(button){
+ const name=button?.dataset?.name || "Product";
+ const price=Number(button?.dataset?.price || 0);
  const cart=JSON.parse(localStorage.getItem("chrisxchange-cart")||"[]");
  const existing=cart.find(item=>item.name===name);
  if(existing) existing.quantity=(existing.quantity||1)+1;
