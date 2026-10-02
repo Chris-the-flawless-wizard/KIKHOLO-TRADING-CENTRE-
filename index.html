@@ -36,8 +36,22 @@
 <li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
 </ul></nav>
 <div class="header-actions">
-<a class="header-icon" href="index%20html/login.html" aria-label="Log in" title="Log in"><i class="fa-solid fa-user"></i></a>
-<a class="header-signup" href="index%20html/register.html">Sign Up</a>
+<div class="site-profile">
+<button type="button" class="header-icon" id="siteProfileBtn" aria-label="Account menu" title="Account" aria-expanded="false"><i class="fa-solid fa-user"></i></button>
+<div class="site-profile-menu" id="siteProfileMenu" hidden>
+<div class="site-profile-top"><strong id="siteProfileName">Guest</strong><small id="siteProfileEmail">Log in to see your account</small></div>
+<a href="index%20html/login.html" id="siteLogin">🔐 Log in</a>
+<a href="index%20html/register.html" id="siteRegister">✨ Create account</a>
+<a href="cart.html">🛒 My cart <span id="siteCartCount">0</span></a>
+<a href="chats.html">💬 Chats</a>
+<a href="reels.html">🎬 Reels</a>
+<a href="#shops">🏪 Businesses</a>
+<a href="index%20html/register-business.html">🏬 Register a business</a>
+<a href="#contact">❓ Help</a>
+<button type="button" id="siteLogout" class="danger" hidden>↪️ Sign out</button>
+</div>
+</div>
+<a class="header-signup" id="headerSignup" href="index%20html/register.html">Sign Up</a>
 <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark and light mode" title="Toggle theme"><i class="fa-solid fa-moon"></i></button>
 <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>
 </div>
@@ -182,6 +196,43 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(() => { cycle++; updateImages(); }, 5000);
 });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("siteProfileBtn");
+  const menu = document.getElementById("siteProfileMenu");
+  if (!btn || !menu) return;
+  const cartCount = () => { try { return JSON.parse(localStorage.getItem("chrisxchange-cart") || "[]").reduce((n, x) => n + Number(x.quantity || 1), 0); } catch (e) { return 0; } };
+  document.getElementById("siteCartCount").textContent = cartCount();
+  btn.addEventListener("click", () => {
+    const open = menu.hasAttribute("hidden");
+    if (open) menu.removeAttribute("hidden"); else menu.setAttribute("hidden", "");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    document.getElementById("siteCartCount").textContent = cartCount();
+  });
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".site-profile")) menu.setAttribute("hidden", "");
+  });
+  const client = window.supabase ? window.supabase.createClient("https://wopjohlkjhqymhjjxqgi.supabase.co", "sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD") : null;
+  if (!client) return;
+  client.auth.getSession().then(({ data }) => {
+    const user = data && data.session && data.session.user;
+    if (!user) return;
+    const name = (user.user_metadata && user.user_metadata.full_name) || (user.email || "Member").split("@")[0];
+    document.getElementById("siteProfileName").textContent = name;
+    document.getElementById("siteProfileEmail").textContent = user.email || "";
+    document.getElementById("siteLogin").hidden = true;
+    document.getElementById("siteRegister").hidden = true;
+    const signup = document.getElementById("headerSignup");
+    if (signup) signup.hidden = true;
+    const out = document.getElementById("siteLogout");
+    out.hidden = false;
+    out.onclick = async () => { await client.auth.signOut(); location.href = "index%20html/login.html"; };
+  }).catch(() => {});
+});
+</script>
+
 <script src="script.js"></script>
 </body>
 </html>
