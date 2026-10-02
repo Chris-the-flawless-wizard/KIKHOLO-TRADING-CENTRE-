@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Profile | CHRISXCHANGE</title>
+<link rel="icon" href="assets/chrisxchange-logo.svg">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#080816;--panel:#121225;--line:#292943;--text:#fff;--muted:#aaaac2;--pink:#ff3cac;--blue:#4cc9f0}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,sans-serif;background:radial-gradient(circle at 10% 10%,#40163855,transparent 30%),radial-gradient(circle at 90% 90%,#123e5555,transparent 30%),var(--bg);color:var(--text)}
+button,input,textarea,select{font:inherit}
+a{color:inherit}
+.top{height:70px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:#080816dd;backdrop-filter:blur(16px);position:sticky;top:0;z-index:5}
+.brand{display:flex;gap:10px;align-items:center;color:#fff;text-decoration:none;font-weight:900}
+.brand img{width:42px}
+.brand b{color:var(--blue)}
+.actions{display:flex;gap:8px}
+.btn{border:1px solid var(--line);background:#19192e;color:#fff;padding:10px 13px;border-radius:12px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn.primary{border:0;background:linear-gradient(135deg,var(--pink),#7c3aed,var(--blue));font-weight:800}
+.wrap{max-width:760px;margin:28px auto;padding:0 16px 40px}
+.card{background:#121225;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 20px 60px #0006}
+.photo-row{display:flex;gap:16px;align-items:center;margin-bottom:8px}
+.avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;background:linear-gradient(135deg,var(--pink),#7c3aed,var(--blue));display:grid;place-items:center;font-weight:900;font-size:32px;flex:none;border:3px solid #ffffff22}
+label{display:block;color:var(--muted);font-size:13px;margin:14px 0 6px}
+input,textarea,select{width:100%;padding:12px;border:1px solid var(--line);background:#0a0a16;color:#fff;border-radius:12px;outline:0}
+textarea{min-height:90px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.actions-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.status{min-height:22px;margin-top:12px;font-weight:700}
+.status.ok{color:#b8ffd9}
+.status.bad{color:#ffd0d8}
+.hint{color:var(--muted);font-size:13px;margin:0}
+.signin{display:grid;gap:10px}
+@media(max-width:640px){.row{grid-template-columns:1fr}.brand span{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+<a class="brand" href="index.html"><img src="assets/chrisxchange-logo.svg" alt=""><span>CHRIS<b>XCHANGE</b> PROFILE</span></a>
+<div class="actions">
+<a class="btn" href="chats.html"><i class="fa-solid fa-comments"></i> Chats</a>
+<a class="btn" href="index.html"><i class="fa-solid fa-house"></i> Home</a>
+</div>
+</header>
+<main class="wrap">
+<section class="card" id="gate">
+<h1>My profile</h1>
+<p class="hint">Sign in to open your profile page and edit your photo and details.</p>
+<form class="signin" id="authForm">
+<label>Email</label>
+<input id="loginEmail" type="email" autocomplete="email" required>
+<label>Password</label>
+<input id="loginPassword" type="password" autocomplete="current-password" required>
+<button class="btn primary" type="submit">Sign in</button>
+</form>
+<p class="status" id="gateStatus"></p>
+</section>
+<section class="card" id="editor" hidden>
+<h1>Edit profile</h1>
+<p class="hint">This page is your profile. Change the photo, name, and the other details, then save.</p>
+<form id="profileForm">
+<div class="photo-row">
+<img id="avatarPreview" class="avatar" alt="Profile photo">
+<div>
+<strong>Profile photo</strong>
+<p class="hint">Choose a picture from your device. It shows on this page after you save.</p>
+<input id="photoInput" type="file" accept="image/*">
+</div>
+</div>
+<div class="row">
+<div>
+<label for="displayName">Display name</label>
+<input id="displayName" maxlength="80" required>
+</div>
+<div>
+<label for="username">Username</label>
+<input id="username" maxlength="24" placeholder="name people can search">
+</div>
+</div>
+<label for="bio">About you</label>
+<textarea id="bio" maxlength="160" placeholder="A short note about you or your shop"></textarea>
+<div class="row">
+<div>
+<label for="area">Area</label>
+<input id="area" maxlength="60" placeholder="Town or area">
+</div>
+<div>
+<label for="interest">What you like on CHRISXCHANGE</label>
+<select id="interest">
+<option value="">Choose one</option>
+<option>Phones</option>
+<option>Computers</option>
+<option>Electronics</option>
+<option>Furniture</option>
+<option>Hardware</option>
+<option>Fashion</option>
+<option>Transport</option>
+<option>Retail</option>
+</select>
+</div>
+</div>
+<label for="emailView">Email</label>
+<input id="emailView" readonly>
+<div class="actions-row">
+<button class="btn primary" type="submit">Save profile</button>
+<a class="btn" href="reset-password.html">Reset password</a>
+<button class="btn" type="button" id="signOut">Sign out</button>
+</div>
+<p class="status" id="saveStatus"></p>
+</form>
+</section>
+</main>
+<script>
+const SB_URL="https://wopjohlkjhqymhjjxqgi.supabase.co";
+const KEY="sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD";
+const sb=window.supabase.createClient(SB_URL,KEY);
+const $=id=>document.getElementById(id);
+let me=null;
+let photoData="";
+
+function initials(name){
+  return (name||"U").trim().split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase()||"U";
+}
+function setStatus(id,text,ok){
+  const el=$(id);
+  el.textContent=text||"";
+  el.className="status"+(text?(ok?" ok":" bad"):"");
+}
+function showEditor(user){
+  me=user;
+  const meta=user.user_metadata||{};
+  const name=meta.full_name||(user.email||"member").split("@")[0];
+  $("gate").hidden=true;
+  $("editor").hidden=false;
+  $("displayName").value=name;
+  $("username").value=meta.username||"";
+  $("bio").value=meta.bio||"";
+  $("area").value=meta.area||"";
+  $("interest").value=meta.interest||"";
+  $("emailView").value=user.email||"";
+  photoData=meta.avatar_url||"";
+  paintPhoto(name);
+}
+function paintPhoto(name){
+  const img=$("avatarPreview");
+  if(photoData){
+    img.src=photoData;
+    img.alt=name+" profile photo";
+  }else{
+    const letter=initials(name);
+    img.src="data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96"><rect width="100%" height="100%" fill="#7c3aed"/><text x="50%" y="56%" text-anchor="middle" font-size="36" fill="white" font-family="sans-serif">'+letter+'</text></svg>');
+  }
+}
+function compress(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onerror=()=>reject(new Error("Could not read that picture."));
+    reader.onload=()=>{
+      const image=new Image();
+      image.onload=()=>{
+        const size=160;
+        const canvas=document.createElement("canvas");
+        canvas.width=size;canvas.height=size;
+        const ctx=canvas.getContext("2d");
+        const scale=Math.max(size/image.width,size/image.height);
+        const w=image.width*scale,h=image.height*scale;
+        ctx.drawImage(image,(size-w)/2,(size-h)/2,w,h);
+        resolve(canvas.toDataURL("image/jpeg",0.72));
+      };
+      image.onerror=()=>reject(new Error("That file is not a picture."));
+      image.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+$("photoInput").onchange=async(event)=>{
+  const file=event.target.files&&event.target.files[0];
+  if(!file)return;
+  try{
+    photoData=await compress(file);
+    paintPhoto($("displayName").value||"Profile");
+    setStatus("saveStatus","Photo ready. Save profile to keep it.",true);
+  }catch(err){
+    setStatus("saveStatus",err.message||"Could not use that picture.",false);
+  }
+};
+$("authForm").onsubmit=async(event)=>{
+  event.preventDefault();
+  setStatus("gateStatus","Signing in...",true);
+  const res=await sb.auth.signInWithPassword({email:$("loginEmail").value.trim(),password:$("loginPassword").value});
+  if(res.error){setStatus("gateStatus",res.error.message,false);return;}
+  showEditor(res.data.user);
+};
+$("profileForm").onsubmit=async(event)=>{
+  event.preventDefault();
+  if(!me)return;
+  const name=$("displayName").value.trim();
+  if(!name){setStatus("saveStatus","Enter a display name.",false);return;}
+  setStatus("saveStatus","Saving...",true);
+  const data={full_name:name,username:$("username").value.trim().replace(/^@/, ""),bio:$("bio").value.trim(),area:$("area").value.trim(),interest:$("interest").value,avatar_url:photoData||me.user_metadata?.avatar_url||""};
+  const updated=await sb.auth.updateUser({data});
+  if(updated.error){setStatus("saveStatus",updated.error.message,false);return;}
+  me=updated.data.user;
+  const row=await sb.from("chat_profiles").upsert({id:me.id,full_name:name,email:me.email,last_seen:new Date().toISOString()},{onConflict:"id"});
+  if(row.error){setStatus("saveStatus","Photo and details saved on your account. Chat name could not update: "+row.error.message,false);return;}
+  setStatus("saveStatus","Profile saved.",true);
+};
+$("signOut").onclick=async()=>{
+  await sb.auth.signOut();
+  location.href="chats.html";
+};
+sb.auth.getSession().then(({data})=>{
+  if(data.session&&data.session.user)showEditor(data.session.user);
+});
+</script>
+</body>
+</html>
