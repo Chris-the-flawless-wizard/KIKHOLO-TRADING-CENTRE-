@@ -3,32 +3,135 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Log In | CHRISXCHANGE</title>
+<title>Account | CHRISXCHANGE</title>
 <link rel="icon" type="image/svg+xml" href="../assets/chrisxchange-logo.svg">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,system-ui,sans-serif;color:#172033;background:linear-gradient(135deg,#dff7ff,#f8ecff 48%,#fff4d8);overflow-x:hidden}body:before,body:after{content:"";position:fixed;border-radius:50%;z-index:-1;opacity:.6}body:before{width:270px;height:270px;background:#7dd3fc;top:-90px;left:-80px}body:after{width:330px;height:330px;background:#f0abfc;right:-110px;bottom:-130px}.page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px 18px}.card{width:min(470px,100%);background:rgba(255,255,255,.9);backdrop-filter:blur(18px);border:1px solid #fff;border-radius:30px;padding:30px;box-shadow:0 24px 70px rgba(43,35,91,.18);position:relative;overflow:hidden}.card:before{content:"";position:absolute;top:0;left:0;right:0;height:7px;background:linear-gradient(90deg,#06b6d4,#6366f1,#ec4899,#f59e0b)}.brand{text-align:center}.logo{width:78px;height:78px;object-fit:contain}.badge{display:inline-block;margin-top:8px;padding:7px 12px;border-radius:999px;background:#eef2ff;color:#4f46e5;font-size:12px;font-weight:800}h1{font-size:32px;margin:14px 0 8px;letter-spacing:-1px}.subtitle{margin:0 auto 22px;color:#64748b;line-height:1.5;font-size:15px}.form-group{margin:14px 0}label{display:block;font-size:13px;font-weight:800;margin-bottom:7px;color:#334155}.input-wrap{position:relative}.input-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%)}input{width:100%;padding:14px 15px 14px 44px;border:2px solid #e2e8f0;border-radius:15px;background:#fff;color:#172033;font-size:15px;outline:none}input:focus{border-color:#6366f1;box-shadow:0 0 0 4px rgba(99,102,241,.11)}.password-toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:#f1f5f9;width:34px;height:34px;border-radius:10px;cursor:pointer}.remember{display:flex;align-items:center;gap:7px;color:#475569}.remember input{width:16px;height:16px;padding:0}.login-btn,.reset-btn{width:100%;border:0;border-radius:15px;font-weight:900;cursor:pointer}.login-btn{padding:15px;color:#fff;background:linear-gradient(110deg,#06b6d4,#6366f1 50%,#ec4899);box-shadow:0 12px 25px rgba(99,102,241,.25)}.login-btn:disabled{opacity:.65;cursor:wait}.reset-btn{margin-top:10px;padding:12px;background:#f8fafc;color:#475569}.message{min-height:25px;text-align:center;font-size:13px;font-weight:700;margin:13px 0}.divider{display:flex;align-items:center;gap:10px;color:#94a3b8;font-size:12px;margin:15px 0}.divider:before,.divider:after{content:"";height:1px;background:#e2e8f0;flex:1}.create{display:block;text-align:center;text-decoration:none;background:#fff7ed;color:#c2410c;padding:12px;border-radius:14px;font-weight:900}.back{display:block;text-align:center;margin-top:16px;color:#64748b;text-decoration:none;font-size:13px;font-weight:700}.footer{text-align:center;margin-top:18px;color:#94a3b8;font-size:11px}@media(max-width:420px){.card{padding:24px}h1{font-size:28px}}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Inter,Segoe UI,sans-serif;color:#172033;background:#f4f7fb}
+.page{min-height:100vh;display:grid;grid-template-columns:minmax(260px,420px) minmax(320px,520px);gap:28px;align-items:center;justify-content:center;padding:28px}
+.intro{color:#0f172a}
+.intro img{width:72px;height:72px}
+.intro h1{margin:12px 0 8px;font-size:34px;letter-spacing:-.8px}
+.intro p{margin:0 0 18px;color:#475569;line-height:1.5}
+.steps{display:grid;gap:10px}
+.step{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:12px 14px}
+.step b{display:block;margin-bottom:3px}
+.step span{color:#64748b;font-size:14px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:22px;padding:24px;box-shadow:0 16px 40px rgba(15,23,42,.06)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#f1f5f9;padding:5px;border-radius:14px;margin-bottom:18px}
+.tab{border:0;background:transparent;border-radius:10px;padding:11px;font-weight:800;cursor:pointer;color:#475569}
+.tab.active{background:#fff;color:#0f172a;box-shadow:0 2px 8px rgba(15,23,42,.08)}
+label{display:block;font-size:13px;font-weight:800;margin:12px 0 6px}
+input{width:100%;padding:13px 14px;border:1px solid #dbe3ee;border-radius:12px;font-size:15px;outline:none}
+input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.12)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;color:#475569;font-size:13px}
+.row button{border:0;background:transparent;color:#2563eb;font-weight:800;cursor:pointer;padding:0}
+.primary{width:100%;margin-top:16px;border:0;border-radius:12px;padding:13px;background:#0f172a;color:#fff;font-weight:800;cursor:pointer}
+.primary:disabled{opacity:.65;cursor:wait}
+.message{min-height:42px;margin:12px 0 0;font-size:13px;font-weight:700}
+.back{display:inline-block;margin-top:14px;color:#64748b;text-decoration:none;font-size:13px;font-weight:700}
+.hidden{display:none}
+@media(max-width:860px){.page{grid-template-columns:1fr}.intro h1{font-size:28px}}
 </style>
 </head>
 <body>
-<main class="page"><form id="loginForm" class="card">
-<div class="brand"><img class="logo" src="../assets/chrisxchange-logo.svg" alt="CHRISXCHANGE"><div class="badge">✨ YOUR MARKETPLACE • YOUR COMMUNITY</div><h1>Welcome Back! 👋</h1><p class="subtitle">Sign in and jump back into CHRISXCHANGE — discover, connect and trade.</p></div>
-<div class="form-group"><label for="email">Email address</label><div class="input-wrap"><span class="input-icon">📧</span><input id="email" required autocomplete="email" type="email" placeholder="you@example.com"></div></div>
-<div class="form-group"><label for="password">Password</label><div class="input-wrap"><span class="input-icon">🔐</span><input id="password" required autocomplete="current-password" type="password" placeholder="Enter your password"><button class="password-toggle" id="togglePassword" type="button">👁️</button></div></div>
-<label class="remember"><input id="remember" type="checkbox" checked> Keep me signed in</label>
-<button id="loginBtn" class="login-btn" type="submit" style="margin-top:15px">🚀 Log In to CHRISXCHANGE</button>
-<button id="resetBtn" class="reset-btn" type="button">🔑 Forgot Password?</button>
+<main class="page">
+<section class="intro">
+<img src="../assets/chrisxchange-logo.svg" alt="CHRISXCHANGE">
+<h1>Your CHRISXCHANGE account</h1>
+<p>Sign in or create an account. New accounts go straight to chats, where you can edit your profile the same way as an email account.</p>
+<div class="steps">
+<div class="step"><b>1. Create or sign in</b><span>Use your email and password. Both are on this page.</span></div>
+<div class="step"><b>2. Open chats</b><span>A new account is sent to chats, not back to the home page.</span></div>
+<div class="step"><b>3. Edit your profile</b><span>Set the name shown in chats from the profile menu.</span></div>
+</div>
+</section>
+<section class="card">
+<div class="tabs">
+<button class="tab active" id="showLogin" type="button">Sign in</button>
+<button class="tab" id="showCreate" type="button">Create account</button>
+</div>
+<form id="loginForm">
+<label for="loginEmail">Email</label>
+<input id="loginEmail" required autocomplete="email" type="email" placeholder="you@example.com">
+<label for="loginPassword">Password</label>
+<input id="loginPassword" required autocomplete="current-password" type="password" placeholder="Your password">
+<div class="row"><label class="remember" style="margin:0"><input id="remember" type="checkbox" checked style="width:auto;margin-right:6px"> Keep me signed in</label><button id="resetBtn" type="button">Forgot password?</button></div>
+<button class="primary" id="loginBtn" type="submit">Sign in and open chats</button>
+</form>
+<form id="createForm" class="hidden">
+<label for="name">Display name</label>
+<input id="name" required autocomplete="name" maxlength="80" placeholder="Name shown in chats">
+<label for="email">Email</label>
+<input id="email" required autocomplete="email" type="email" placeholder="you@example.com">
+<label for="password">Password</label>
+<input id="password" required autocomplete="new-password" type="password" minlength="6" placeholder="At least 6 characters">
+<label for="confirm">Confirm password</label>
+<input id="confirm" required autocomplete="new-password" type="password" minlength="6" placeholder="Repeat password">
+<button class="primary" id="createBtn" type="submit">Create account and open chats</button>
+</form>
 <p id="message" class="message" aria-live="polite"></p>
-<div class="divider">new here?</div><a class="create" href="register.html">🎓 Create Your CHRISXCHANGE Account</a><a class="back" href="../index.html">← Back to CHRISXCHANGE Home</a>
-<div class="footer">Made for connecting people, ideas, businesses & opportunities.</div>
-</form></main>
+<a class="back" href="../index.html">Back to home</a>
+</section>
+</main>
 <script>
-const SUPABASE_URL="https://wopjohlkjhqymhjjxqgi.supabase.co";
-const SUPABASE_KEY="sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD";
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-const form=document.getElementById("loginForm"),message=document.getElementById("message"),loginBtn=document.getElementById("loginBtn");
-document.getElementById("togglePassword").addEventListener("click",()=>{const p=document.getElementById("password"),b=document.getElementById("togglePassword");p.type=p.type==="password"?"text":"password";b.textContent=p.type==="password"?"👁️":"🙈"});
-form.addEventListener("submit",async e=>{e.preventDefault();loginBtn.disabled=true;loginBtn.textContent="⏳ Signing you in...";message.style.color="#64748b";message.textContent="Checking your account...";const email=document.getElementById("email").value.trim().toLowerCase(),password=document.getElementById("password").value;const {data,error}=await sb.auth.signInWithPassword({email,password});if(error){loginBtn.disabled=false;loginBtn.textContent="🚀 Log In to CHRISXCHANGE";message.style.color="#dc2626";message.textContent=error.message;return}if(!data.session){loginBtn.disabled=false;loginBtn.textContent="🚀 Log In to CHRISXCHANGE";message.style.color="#dc2626";message.textContent="Login failed: no session was created.";return}message.style.color="#16a34a";message.textContent="✅ Login successful! Opening your Chats...";loginBtn.textContent="🎉 Success!";setTimeout(()=>location.href="../chats.html",500)});
-document.getElementById("resetBtn").addEventListener("click",async()=>{const email=document.getElementById("email").value.trim().toLowerCase();if(!email){message.style.color="#dc2626";message.textContent="Enter your email address first.";document.getElementById("email").focus();return}message.style.color="#64748b";message.textContent="📨 Sending password-reset email...";const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:new URL("../reset-password.html",window.location.href).href});if(error){message.style.color="#dc2626";message.textContent=error.message;return}message.style.color="#16a34a";message.textContent="✅ If this account exists, check your email for the reset link."});
+const sb=window.supabase.createClient("https://wopjohlkjhqymhjjxqgi.supabase.co","sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD",{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const message=document.getElementById("message");
+const loginForm=document.getElementById("loginForm");
+const createForm=document.getElementById("createForm");
+function show(mode){
+  const create=mode==="create";
+  loginForm.classList.toggle("hidden",create);
+  createForm.classList.toggle("hidden",!create);
+  document.getElementById("showLogin").classList.toggle("active",!create);
+  document.getElementById("showCreate").classList.toggle("active",create);
+  message.textContent="";
+  history.replaceState(null,"",create?"#create":"#login");
+}
+document.getElementById("showLogin").onclick=()=>show("login");
+document.getElementById("showCreate").onclick=()=>show("create");
+if(location.hash==="#create")show("create");
+function goChats(setup){location.href="../chats.html"+(setup?"?setup=1":"");}
+sb.auth.getSession().then(({data})=>{if(data.session)goChats(location.hash==="#create")});
+loginForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const btn=document.getElementById("loginBtn");
+  btn.disabled=true;btn.textContent="Signing in...";
+  message.style.color="#475569";message.textContent="Checking your account...";
+  const email=document.getElementById("loginEmail").value.trim().toLowerCase();
+  const password=document.getElementById("loginPassword").value;
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  if(error||!data.session){btn.disabled=false;btn.textContent="Sign in and open chats";message.style.color="#dc2626";message.textContent=error?.message||"Login failed." ;return}
+  message.style.color="#15803d";message.textContent="Signed in. Opening chats...";
+  goChats(false);
+});
+document.getElementById("resetBtn").addEventListener("click",async()=>{
+  const email=document.getElementById("loginEmail").value.trim().toLowerCase();
+  if(!email){message.style.color="#dc2626";message.textContent="Enter your email first.";return}
+  message.style.color="#475569";message.textContent="Sending password reset email...";
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:new URL("../reset-password.html",location.href).href});
+  message.style.color=error?"#dc2626":"#15803d";
+  message.textContent=error?error.message:"If this account exists, check your email for the reset link.";
+});
+createForm.addEventListener("submit",async e=>{
+  e.preventDefault();
+  const name=document.getElementById("name").value.trim();
+  const email=document.getElementById("email").value.trim().toLowerCase();
+  const password=document.getElementById("password").value;
+  const confirm=document.getElementById("confirm").value;
+  const btn=document.getElementById("createBtn");
+  if(password!==confirm){message.style.color="#dc2626";message.textContent="Passwords do not match.";return}
+  btn.disabled=true;btn.textContent="Creating account...";
+  message.style.color="#475569";message.textContent="Creating your account...";
+  const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name},emailRedirectTo:new URL("../chats.html?setup=1",location.href).href}});
+  if(error){btn.disabled=false;btn.textContent="Create account and open chats";message.style.color="#dc2626";message.textContent=error.message;return}
+  let session=data.session;
+  if(!session){const signed=await sb.auth.signInWithPassword({email,password});session=signed.data?.session||null}
+  if(session){message.style.color="#15803d";message.textContent="Account created. Opening chats so you can edit your profile...";goChats(true);return}
+  message.style.color="#15803d";message.textContent="Account created. Confirm your email, then you will open chats and can edit your profile.";
+  btn.disabled=false;btn.textContent="Create account and open chats";
+});
 </script>
-</body></html>
+</body>
+</html>
