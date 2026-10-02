@@ -20,6 +20,15 @@
  }
 })();
 </script>
+<style>
+.head-btn{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 16px;border-radius:999px;text-decoration:none;font-weight:800}
+.head-btn i{width:16px;text-align:center}
+.home-btn{color:#102033;background:#fff;border:1px solid #d7e2f1;box-shadow:0 6px 16px #0f172a12}
+.profile-btn{color:#fff;background:linear-gradient(135deg,#ff3cac,#7c3aed 58%,#4cc9f0);box-shadow:0 8px 18px #7c3aed44}
+.nav-profile{background:linear-gradient(135deg,#ff3cac,#7c3aed);color:#fff!important;border-radius:999px;padding:8px 14px!important}
+.menu-profile{display:flex;align-items:center;gap:8px;font-weight:800}
+@media(max-width:700px){.head-btn span{display:none}.head-btn{width:42px;padding:0;justify-content:center}}
+</style>
 </head>
 <body>
 <header>
@@ -30,13 +39,15 @@
 <li><a href="#home"><i class="fa-solid fa-house"></i> Home</a></li>
 <li><a href="#shops"><i class="fa-solid fa-store"></i> Businesses</a></li>
 <li><a href="reels.html"><i class="fa-solid fa-clapperboard"></i> Reels</a></li>
-<li><a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+<li><a class="nav-profile" href="profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
 <li><a href="chats.html"><i class="fa-solid fa-comments"></i> Chats</a></li>
 <li><a href="#services"><i class="fa-solid fa-layer-group"></i> Services</a></li>
 <li><a href="#gallery"><i class="fa-solid fa-images"></i> Gallery</a></li>
 <li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
 </ul></nav>
 <div class="header-actions">
+<a class="head-btn home-btn" href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+<a class="head-btn profile-btn" href="profile.html"><i class="fa-solid fa-user"></i><span>Profile</span></a>
 <div class="site-profile">
 <button type="button" class="header-icon" id="siteProfileBtn" aria-label="Account menu" title="Account" aria-expanded="false"><i class="fa-solid fa-user"></i></button>
 <div class="site-profile-menu" id="siteProfileMenu" hidden>
@@ -44,7 +55,7 @@
 <button type="button" id="siteLogin">🔐 Log in</button>
 <a href="index%20html/register.html" id="siteRegister">✨ Create account</a>
 <a href="cart.html">🛒 My cart <span id="siteCartCount">0</span></a>
-<a href="profile.html">👤 My Profile</a>
+<a class="menu-profile" href="profile.html"><i class="fa-solid fa-user"></i> My Profile</a>
 <a href="chats.html">💬 Chats</a>
 <a href="reels.html">🎬 Reels</a>
 <a href="#shops">🏪 Businesses</a>
