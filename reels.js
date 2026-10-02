@@ -4,12 +4,15 @@ const SUPABASE_KEY="sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD";
 const LOGIN_URL="index%20html/login.html";
 const MAX_VIDEO=50*1024*1024;
 // Direct TikTok posts can be listed here. These are embedded from TikTok itself.
-const TIKTOK_POSTS=[];
+const TIKTOK_POSTS=[
+ {url:"https://www.tiktok.com/@tiktoksmallbusiness_uki/video/7475456532713393415",creator:"tiktoksmallbusiness_uki",caption:"Small business tips, played direct from TikTok."},
+ {url:"https://www.tiktok.com/@todayshow/video/7169249014679096622",creator:"todayshow",caption:"Five tips to help a small business stand out, direct from TikTok."},
+ {url:"https://www.tiktok.com/@sebraenacional/video/7473931406591151415",creator:"sebraenacional",caption:"How to sell in marketplaces, direct from TikTok."}
+];
 const DISCOVERY=[
   {platform:"youtube",query:"trade business entrepreneurship Uganda Africa",title:"Business & Trade in Africa"},
   {platform:"youtube",query:"small business trade entrepreneurship East Africa",title:"Small Business & Trade"},
-  {platform:"youtube",query:"import export international trade tips",title:"Import • Export • Trade Tips"},
-  {platform:"tiktok",query:"trade business entrepreneurship Uganda",title:"TikTok • Trade & Business"}
+  {platform:"youtube",query:"import export international trade tips",title:"Import • Export • Trade Tips"}
 ];
 let sb=null,me=null,reels=[],observer=null;
 
@@ -70,8 +73,8 @@ function render(){
  const feed=$("#reelsFeed"),empty=$("#emptyReels");
  if(!feed)return;
  feed.innerHTML="";
- const directTikToks=TIKTOK_POSTS.filter(x=>x&&x.url).map((x,i)=>({id:"tiktok-direct-"+i,type:"tiktok",discovery:false,owner_id:null,source_url:x.url,creator_name:x.creator||"TikTok creator",caption:x.caption||"Trade, business and marketplace video from TikTok."}));
- const items=[...directTikToks,...reels,...DISCOVERY.map((d,i)=>({id:"discover-"+i,type:d.platform,discovery:true,query:d.query,creator_name:d.title,caption:"Discover fresh "+(d.platform==="youtube"?"YouTube":"TikTok")+" content about trade, business and entrepreneurship."}))];
+ const directTikToks=TIKTOK_POSTS.filter(x=>x&&x.url).map((x,i)=>({id:"tiktok-direct-"+i,type:"tiktok",discovery:true,platform:"tiktok",owner_id:null,source_url:x.url,creator_name:x.creator||"TikTok creator",caption:x.caption||"Direct TikTok video."}));
+ const items=[...directTikToks,...reels.filter(r=>r.type==="tiktok"),...reels.filter(r=>r.type!=="tiktok"),...DISCOVERY.map((d,i)=>({id:"discover-"+i,type:d.platform,discovery:true,query:d.query,creator_name:d.title,caption:"Discover trade and business videos."}))];
  if(!items.length){empty.style.display="grid";return}
  empty.style.display="none";
  items.forEach((r,i)=>{const card=document.createElement("article");card.className="reel-card";card.dataset.id=r.id;card.innerHTML=r.discovery?discoveryMarkup(r):markup(r);feed.appendChild(card);if(!r.discovery)setupActions(card,r);else setupDiscovery(card,r);});
@@ -87,12 +90,13 @@ function markup(r){
 function tiktokMarkup(r){
  const id=tiktokId(r.source_url||"");
  if(!id)return '<div class="video-unavailable"><i class="fa-brands fa-tiktok"></i><span>Invalid TikTok video link</span></div>';
- return '<iframe class="tiktok-frame" src="https://www.tiktok.com/player/v1/'+encodeURIComponent(id)+'?description=1&music_info=1&rel=0" title="TikTok trade video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+ return '<iframe class="tiktok-frame" src="https://www.tiktok.com/player/v1/'+encodeURIComponent(id)+'?autoplay=1&loop=1&description=1&music_info=1&rel=0&controls=1" title="TikTok trade video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
 }
 function youtubeMarkup(r){return '<iframe class="youtube-frame" src="https://www.youtube.com/embed/'+attr(youtubeId(r.source_url||""))+'?autoplay=0&mute=1&playsinline=1&rel=0" title="YouTube trade video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>'}
 function discoveryMarkup(r){
+ if(r.platform==="tiktok"||r.type==="tiktok")return '<div class="reel-media embed-media">'+tiktokMarkup(r)+'</div><div class="reel-bottom"><div class="creator-line"><span class="avatar tiktok-avatar"><i class="fa-brands fa-tiktok"></i></span><strong>@'+esc(r.creator_name)+'</strong></div><p>'+esc(r.caption)+'</p></div><div class="reel-discovery-link"><a href="'+attr(r.source_url)+'" target="_blank" rel="noopener">Watch on TikTok <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
  if(r.platform==="youtube")return '<div class="reel-media embed-media discovery-media"><iframe class="youtube-frame" src="https://www.youtube.com/embed?listType=search&list='+encodeURIComponent(r.query)+'&rel=0" title="'+attr(r.creator_name)+'" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div><div class="reel-bottom"><div class="creator-line"><span class="avatar"><i class="fa-brands fa-youtube"></i></span><strong>'+esc(r.creator_name)+'</strong></div><p>'+esc(r.caption)+'</p></div><div class="reel-discovery-link"><a href="https://www.youtube.com/results?search_query='+encodeURIComponent(r.query)+'" target="_blank" rel="noopener">Open YouTube search <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
- return '<div class="reel-media discovery-tiktok"><div class="discovery-platform"><i class="fa-brands fa-tiktok"></i><strong>Discover TikTok trade videos</strong><span>Search results stay on TikTok — CHRISXCHANGE does not copy or re-host them.</span><a href="https://www.tiktok.com/search?q='+encodeURIComponent(r.query)+'" target="_blank" rel="noopener">Open TikTok <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div></div><div class="reel-bottom"><div class="creator-line"><span class="avatar tiktok-avatar"><i class="fa-brands fa-tiktok"></i></span><strong>'+esc(r.creator_name)+'</strong></div><p>'+esc(r.caption)+'</p></div>';
+ return '<div class="reel-media embed-media">'+tiktokMarkup({source_url:r.source_url})+'</div><div class="reel-bottom"><div class="creator-line"><span class="avatar tiktok-avatar"><i class="fa-brands fa-tiktok"></i></span><strong>@'+esc(r.creator_name)+'</strong></div><p>'+esc(r.caption)+'</p></div><div class="reel-discovery-link"><a href="'+attr(r.source_url)+'" target="_blank" rel="noopener">Watch on TikTok <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
 }
 function actionsMarkup(r){return '<div class="reel-side-actions"><button class="side-action like-btn '+(r.liked?"liked":"")+'"><i class="fa-'+(r.liked?"solid":"regular")+' fa-heart"></i><span>'+r.likes+'</span></button><button class="side-action comment-btn"><i class="fa-regular fa-comment"></i><span>'+r.comments.length+'</span></button><button class="side-action share-btn"><i class="fa-solid fa-share"></i><span>Share</span></button><button class="side-action dots-btn" aria-label="More"><i class="fa-solid fa-ellipsis-vertical"></i></button></div><div class="comments-panel"><div class="comment-list">'+r.comments.map(c=>'<div><strong>You:</strong> '+esc(c.body)+'</div>').join("")+'</div><form class="comment-form"><input maxlength="120" placeholder="Write a comment..." required><button aria-label="Send"><i class="fa-solid fa-paper-plane"></i></button></form></div>'}
 
