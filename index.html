@@ -40,7 +40,7 @@
 <button type="button" class="header-icon" id="siteProfileBtn" aria-label="Account menu" title="Account" aria-expanded="false"><i class="fa-solid fa-user"></i></button>
 <div class="site-profile-menu" id="siteProfileMenu" hidden>
 <div class="site-profile-top"><strong id="siteProfileName">Guest</strong><small id="siteProfileEmail">Log in to see your account</small></div>
-<a href="index%20html/login.html" id="siteLogin">🔐 Log in</a>
+<button type="button" id="siteLogin">🔐 Log in</button>
 <a href="index%20html/register.html" id="siteRegister">✨ Create account</a>
 <a href="cart.html">🛒 My cart <span id="siteCartCount">0</span></a>
 <a href="chats.html">💬 Chats</a>
@@ -197,6 +197,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<div id="pageLogin" hidden style="position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;place-items:center;padding:18px">
+<form id="pageLoginForm" style="width:min(420px,100%);background:#121225;color:#fff;border:1px solid #292943;border-radius:22px;padding:22px">
+<h2 style="margin:0 0 8px">Log in</h2>
+<p style="color:#aaaac2;margin-top:0">Sign in here. You will stay on this page.</p>
+<label>Email<br><input id="pageEmail" type="email" required autocomplete="email" style="width:100%;margin:6px 0 12px;padding:12px;border-radius:12px;border:1px solid #292943;background:#0a0a16;color:#fff"></label>
+<label>Password<br><input id="pagePassword" type="password" required autocomplete="current-password" style="width:100%;margin:6px 0 12px;padding:12px;border-radius:12px;border:1px solid #292943;background:#0a0a16;color:#fff"></label>
+<div id="pageLoginMessage" style="font-size:14px;margin-bottom:12px;color:#a9ecff">Enter your CHRISXCHANGE email and password.</div>
+<div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" id="pageLoginCancel">Cancel</button><button type="submit" id="pageLoginSubmit">Log in</button></div>
+</form></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -216,9 +225,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   const client = window.supabase ? window.supabase.createClient("https://wopjohlkjhqymhjjxqgi.supabase.co", "sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD") : null;
   if (!client) return;
-  client.auth.getSession().then(({ data }) => {
-    const user = data && data.session && data.session.user;
-    if (!user) return;
+  const loginBox = document.getElementById("pageLogin");
+  const loginMessage = document.getElementById("pageLoginMessage");
+  function showSignedIn(user) {
     const name = (user.user_metadata && user.user_metadata.full_name) || (user.email || "Member").split("@")[0];
     document.getElementById("siteProfileName").textContent = name;
     document.getElementById("siteProfileEmail").textContent = user.email || "";
@@ -228,7 +237,37 @@ document.addEventListener("DOMContentLoaded", () => {
     if (signup) signup.hidden = true;
     const out = document.getElementById("siteLogout");
     out.hidden = false;
-    out.onclick = async () => { await client.auth.signOut(); location.href = "index%20html/login.html"; };
+    out.onclick = async () => { await client.auth.signOut(); location.reload(); };
+  }
+  function openPageLogin() { loginBox.hidden = false; loginBox.style.display = "grid"; menu.setAttribute("hidden",""); }
+  document.getElementById("siteLogin").addEventListener("click", openPageLogin);
+  document.getElementById("pageLoginCancel").addEventListener("click", () => { loginBox.hidden = true; loginBox.style.display = "none"; });
+  loginBox.addEventListener("click", (event) => { if (event.target === loginBox) { loginBox.hidden = true; loginBox.style.display = "none"; } });
+  document.getElementById("pageLoginForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const submit = document.getElementById("pageLoginSubmit");
+    const email = document.getElementById("pageEmail").value.trim().toLowerCase();
+    const password = document.getElementById("pagePassword").value;
+    submit.disabled = true;
+    submit.textContent = "Signing in...";
+    loginMessage.textContent = "Checking your account...";
+    const { data, error } = await client.auth.signInWithPassword({ email, password });
+    if (error || !data.session) {
+      submit.disabled = false;
+      submit.textContent = "Log in";
+      loginMessage.textContent = (error && error.message) || "Login failed. No session was created.";
+      return;
+    }
+    loginMessage.textContent = "Login successful. You are still on this page.";
+    showSignedIn(data.session.user);
+    submit.disabled = false;
+    submit.textContent = "Log in";
+    setTimeout(() => { loginBox.hidden = true; loginBox.style.display = "none"; }, 700);
+  });
+  client.auth.getSession().then(({ data }) => {
+    const user = data && data.session && data.session.user;
+    if (!user) return;
+    showSignedIn(user);
   }).catch(() => {});
 });
 </script>
