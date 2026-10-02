@@ -1389,3 +1389,7 @@ position:relative;
 .site-profile-menu .danger{color:#ff8aa3}
 body.light-mode .site-profile-menu{background:#fff;color:#172033;border-color:#e6e8f0}
 body.light-mode .site-profile-top small{color:#64748b}
+
+.site-profile-menu a,.site-profile-menu button{min-height:42px;gap:8px;font-weight:700}
+.hero-actions,.cta-buttons{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.hero-primary,.hero-secondary,.cta-primary,.cta-secondary{min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
