@@ -31,7 +31,7 @@ input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.12)}
 .primary:disabled{opacity:.65;cursor:wait}
 .message{min-height:42px;margin:12px 0 0;font-size:13px;font-weight:700}
 .back{display:inline-block;margin-top:14px;margin-right:14px;color:#64748b;text-decoration:none;font-size:13px;font-weight:700}
-.hidden{display:none}
+ .google{width:100%;margin-top:12px;border:1px solid #dbe3ee;border-radius:12px;padding:13px;background:#fff;color:#172033;font-weight:800;cursor:pointer}.hidden{display:none}
 @media(max-width:860px){.page{grid-template-columns:1fr}.intro h1{font-size:28px}}
 </style>
 </head>
@@ -71,6 +71,7 @@ input:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.12)}
 <input id="confirm" required autocomplete="new-password" type="password" minlength="6" placeholder="Repeat password">
 <button class="primary" id="createBtn" type="submit">Create account and open profile</button>
 </form>
+<button class="google" id="googleBtn" type="button">Continue with Google</button>
 <p id="message" class="message" aria-live="polite"></p>
 <a class="back" href="../profile.html">Edit profile</a>
 <a class="back" href="../index.html">Back to home</a>
@@ -90,6 +91,7 @@ function show(mode){
   message.textContent="";
   history.replaceState(null,"",create?"#create":"#login");
 }
+document.getElementById("googleBtn").onclick=async()=>{message.style.color="#475569";message.textContent="Opening Google...";const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:new URL("../profile.html",location.href).href}});if(error){message.style.color="#dc2626";message.textContent=error.message||"Google sign-in is not enabled yet.";}};
 document.getElementById("showLogin").onclick=()=>show("login");
 document.getElementById("showCreate").onclick=()=>show("create");
 const preset=new URLSearchParams(location.search);if(preset.get("email")){document.getElementById("email").value=preset.get("email");show("create")}else if(location.hash==="#create")show("create");
