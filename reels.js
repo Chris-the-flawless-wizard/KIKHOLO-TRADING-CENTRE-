@@ -1,28 +1,27 @@
-/* CHRISXCHANGE REELS — persistent, mobile-first short-video feed */
+/* CHRISXCHANGE REELS — direct TikTok embeds only */
 const SUPABASE_URL="https://wopjohlkjhqymhjjxqgi.supabase.co";
 const SUPABASE_KEY="sb_publishable_ZAngJWvWaTYJWUF8JZWSZQ_tGh4lDwD";
 const LOGIN_URL="index%20html/login.html";
 const MAX_VIDEO=50*1024*1024;
-// Direct TikTok posts can be listed here. These are embedded from TikTok itself.
+
+// Direct TikTok videos — played from TikTok’s official player (https://www.tiktok.com/player/v1/VIDEO_ID)
 const TIKTOK_POSTS=[
- {url:"https://www.tiktok.com/@tiktoksmallbusiness_uki/video/7475456532713393415",creator:"tiktoksmallbusiness_uki",caption:"Small business tips, played direct from TikTok."},
- {url:"https://www.tiktok.com/@todayshow/video/7169249014679096622",creator:"todayshow",caption:"Five tips to help a small business stand out, direct from TikTok."},
- {url:"https://www.tiktok.com/@sebraenacional/video/7473931406591151415",creator:"sebraenacional",caption:"How to sell in marketplaces, direct from TikTok."}
+  {url:"https://www.tiktok.com/@scout2015/video/6718335390845095173",creator:"scout2015",caption:"Classic TikTok example — direct embed."},
+  {url:"https://www.tiktok.com/@tiktoksmallbusiness_uki/video/7475456532713393415",creator:"tiktoksmallbusiness_uki",caption:"Small business tips, played direct from TikTok."},
+  {url:"https://www.tiktok.com/@todayshow/video/7169249014679096622",creator:"todayshow",caption:"Five tips to help a small business stand out, direct from TikTok."},
+  {url:"https://www.tiktok.com/@sebraenacional/video/7473931406591151415",creator:"sebraenacional",caption:"How to sell in marketplaces, direct from TikTok."},
+  {url:"https://www.tiktok.com/@channel44tv/video/7486906094963395846",creator:"channel44tv",caption:"I started with 5,000 Ugandan Shillings — direct from TikTok."}
 ];
-const DISCOVERY=[
-  {platform:"youtube",query:"trade business entrepreneurship Uganda Africa",title:"Business & Trade in Africa"},
-  {platform:"youtube",query:"small business trade entrepreneurship East Africa",title:"Small Business & Trade"},
-  {platform:"youtube",query:"import export international trade tips",title:"Import • Export • Trade Tips"}
-];
+
 let sb=null,me=null,reels=[],observer=null;
 
 document.addEventListener("DOMContentLoaded",async()=>{
   setupUI();
-  // Always show discovery content first so the page never stays stuck on the loading spinner
+  // Show TikTok embeds immediately
   reels=[];
   render();
   if(!window.supabase){
-    console.warn("Supabase library not loaded — showing discovery feed only");
+    console.warn("Supabase not loaded — showing TikTok embeds only");
     return;
   }
   sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
@@ -30,7 +29,6 @@ document.addEventListener("DOMContentLoaded",async()=>{
     const {data}=await sb.auth.getSession();
     me=data?.session?.user||null;
   }catch(e){console.warn("Auth check failed",e)}
-  // Load user reels in background; discovery content is already visible
   loadFeed().catch(e=>console.warn("Feed load failed",e));
   subscribe();
 });
@@ -69,7 +67,7 @@ async function loadFeed(){
   reels=(data||[]).map(r=>({...r,comments:comments.filter(c=>c.reel_id===r.id),likes:likes.filter(l=>l.reel_id===r.id).length,liked:likes.some(l=>l.reel_id===r.id&&l.user_id===me?.id)}));
   render();
  }catch(e){
-  console.warn("Could not load user reels — discovery feed remains visible",e);
+  console.warn("Could not load user reels — TikTok embeds remain visible",e);
  }
 }
 
@@ -77,51 +75,35 @@ function render(){
  const feed=$("#reelsFeed"),empty=$("#emptyReels");
  if(!feed)return;
  feed.innerHTML="";
- const directTikToks=TIKTOK_POSTS.filter(x=>x&&x.url).map((x,i)=>({id:"tiktok-direct-"+i,type:"tiktok",discovery:true,platform:"tiktok",owner_id:null,source_url:x.url,creator_name:x.creator||"TikTok creator",caption:x.caption||"Direct TikTok video."}));
- const items=[...directTikToks,...reels.filter(r=>r.type==="tiktok"),...reels.filter(r=>r.type!=="tiktok"),...DISCOVERY.map((d,i)=>({id:"discover-"+i,type:d.platform,discovery:true,query:d.query,creator_name:d.title,caption:"Discover trade and business videos."}))];
+ // Only direct TikTok embeds + any user-added TikTok reels
+ const directTikToks=TIKTOK_POSTS.filter(x=>x&&x.url).map((x,i)=>({id:"tiktok-direct-"+i,type:"tiktok",discovery:true,platform:"tiktok",owner_id:null,source_url:x.url,creator_name:x.creator||"TikTok creator",caption:x.caption||"Direct from TikTok."}));
+ const userTikToks=reels.filter(r=>r.type==="tiktok");
+ const items=[...directTikToks,...userTikToks];
  if(!items.length){empty.style.display="grid";return}
  empty.style.display="none";
- items.forEach((r,i)=>{const card=document.createElement("article");card.className="reel-card";card.dataset.id=r.id;card.innerHTML=r.discovery?discoveryMarkup(r):markup(r);feed.appendChild(card);if(!r.discovery)setupActions(card,r);else setupDiscovery(card,r);});
+ items.forEach((r)=>{const card=document.createElement("article");card.className="reel-card";card.dataset.id=r.id;card.innerHTML=discoveryMarkup(r);feed.appendChild(card);setupDiscovery(card,r);});
  observeCards();
 }
 
-function markup(r){
- const media=r.type==="video" ? '<video class="reel-video" playsinline loop preload="metadata" controlslist="nodownload"></video>' :
- r.type==="tiktok" ? tiktokMarkup(r) : youtubeMarkup(r);
- const mediaWrap=r.type==="video" ? '<div class="reel-media">'+media+'<button class="center-play" aria-label="Play"><i class="fa-solid fa-play"></i></button><button class="sound-btn" aria-label="Mute or unmute"><i class="fa-solid fa-volume-xmark"></i></button></div>' : '<div class="reel-media embed-media">'+media+'</div>';
- return mediaWrap+'<div class="reel-bottom"><div class="creator-line"><span class="avatar"><i class="'+(r.type==="tiktok"?"fa-brands fa-tiktok":"fa-solid fa-user")+'"></i></span><strong>@'+esc(r.creator_name)+'</strong></div><p>'+esc(r.caption||"")+'</p></div>'+actionsMarkup(r);
-}
 function tiktokMarkup(r){
  const id=tiktokId(r.source_url||"");
- if(!id)return '<div class="video-unavailable"><i class="fa-brands fa-tiktok"></i><span>Invalid TikTok video link</span></div>';
- return '<iframe class="tiktok-frame" src="https://www.tiktok.com/player/v1/'+encodeURIComponent(id)+'?autoplay=1&loop=1&description=1&music_info=1&rel=0&controls=1" title="TikTok trade video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+ if(!id)return '<div class="video-unavailable"><i class="fa-brands fa-tiktok"></i><span>Invalid TikTok link</span></div>';
+ // Official TikTok Embed Player — plays direct from TikTok
+ return '<iframe class="tiktok-frame" src="https://www.tiktok.com/player/v1/'+encodeURIComponent(id)+'?autoplay=1&loop=1&music_info=1&description=1&rel=0&controls=1" title="TikTok video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
 }
-function youtubeMarkup(r){return '<iframe class="youtube-frame" src="https://www.youtube.com/embed/'+attr(youtubeId(r.source_url||""))+'?autoplay=0&mute=1&playsinline=1&rel=0" title="YouTube trade video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>'}
-function discoveryMarkup(r){
- if(r.platform==="tiktok"||r.type==="tiktok")return '<div class="reel-media embed-media">'+tiktokMarkup(r)+'</div><div class="reel-bottom"><div class="creator-line"><span class="avatar tiktok-avatar"><i class="fa-brands fa-tiktok"></i></span><strong>@'+esc(r.creator_name)+'</strong></div><p>'+esc(r.caption)+'</p></div><div class="reel-discovery-link"><a href="'+attr(r.source_url)+'" target="_blank" rel="noopener">Watch on TikTok <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
- if(r.platform==="youtube")return '<div class="reel-media embed-media discovery-media"><iframe class="youtube-frame" src="https://www.youtube.com/embed?listType=search&list='+encodeURIComponent(r.query)+'&rel=0" title="'+attr(r.creator_name)+'" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div><div class="reel-bottom"><div class="creator-line"><span class="avatar"><i class="fa-brands fa-youtube"></i></span><strong>'+esc(r.creator_name)+'</strong></div><p>'+esc(r.caption)+'</p></div><div class="reel-discovery-link"><a href="https://www.youtube.com/results?search_query='+encodeURIComponent(r.query)+'" target="_blank" rel="noopener">Open YouTube search <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
- return '<div class="reel-media embed-media">'+tiktokMarkup({source_url:r.source_url})+'</div><div class="reel-bottom"><div class="creator-line"><span class="avatar tiktok-avatar"><i class="fa-brands fa-tiktok"></i></span><strong>@'+esc(r.creator_name)+'</strong></div><p>'+esc(r.caption)+'</p></div><div class="reel-discovery-link"><a href="'+attr(r.source_url)+'" target="_blank" rel="noopener">Watch on TikTok <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
-}
-function actionsMarkup(r){return '<div class="reel-side-actions"><button class="side-action like-btn '+(r.liked?"liked":"")+'"><i class="fa-'+(r.liked?"solid":"regular")+' fa-heart"></i><span>'+r.likes+'</span></button><button class="side-action comment-btn"><i class="fa-regular fa-comment"></i><span>'+r.comments.length+'</span></button><button class="side-action share-btn"><i class="fa-solid fa-share"></i><span>Share</span></button><button class="side-action dots-btn" aria-label="More"><i class="fa-solid fa-ellipsis-vertical"></i></button></div><div class="comments-panel"><div class="comment-list">'+r.comments.map(c=>'<div><strong>You:</strong> '+esc(c.body)+'</div>').join("")+'</div><form class="comment-form"><input maxlength="120" placeholder="Write a comment..." required><button aria-label="Send"><i class="fa-solid fa-paper-plane"></i></button></form></div>'}
 
-function setupActions(card,r){
- const v=card.querySelector(".reel-video"),p=card.querySelector(".center-play"),s=card.querySelector(".sound-btn");
- const toggle=()=>{if(v.paused){pauseOthers(v);v.play().catch(()=>{});card.classList.add("playing")}else{v.pause();card.classList.remove("playing")}};
- if(v){p.onclick=toggle;v.onclick=toggle;s.onclick=e=>{e.stopPropagation();v.muted=!v.muted;s.innerHTML=v.muted?'<i class="fa-solid fa-volume-xmark"></i>':'<i class="fa-solid fa-volume-high"></i>'};loadVideo(v,r)}
- card.querySelector(".like-btn").onclick=()=>toggleLike(r,card);
- card.querySelector(".comment-btn").onclick=()=>card.querySelector(".comments-panel").classList.toggle("open");
- card.querySelector(".comment-form").onsubmit=e=>{e.preventDefault();addComment(r,e.target.querySelector("input").value.trim())};
- card.querySelector(".share-btn").onclick=()=>shareReel(r);
- card.querySelector(".dots-btn").onclick=e=>{e.stopPropagation();openDots(r,e.currentTarget)};
+function discoveryMarkup(r){
+ return '<div class="reel-media embed-media">'+tiktokMarkup(r)+'</div><div class="reel-bottom"><div class="creator-line"><span class="avatar tiktok-avatar"><i class="fa-brands fa-tiktok"></i></span><strong>@'+esc(r.creator_name)+'</strong></div><p>'+esc(r.caption)+'</p></div><div class="reel-discovery-link"><a href="'+attr(r.source_url)+'" target="_blank" rel="noopener">Watch on TikTok <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
 }
-async function loadVideo(v,r){if(!r.video_url)v.parentElement.innerHTML='<div class="video-unavailable"><i class="fa-solid fa-video-slash"></i><span>Video unavailable</span></div>';else v.src=r.video_url}
+
 function setupDiscovery(card,r){card.querySelectorAll("a").forEach(a=>a.addEventListener("click",e=>e.stopPropagation()))}
 function observeCards(){
  observer?.disconnect();
- observer=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target.querySelector(".reel-video");if(!v)return;if(e.isIntersecting&&e.intersectionRatio>.75){pauseOthers(v);v.muted=true;v.play().then(()=>e.target.classList.add("playing")).catch(()=>{})}else{v.pause();e.target.classList.remove("playing")}}),{threshold:[.25,.75]});
+ observer=new IntersectionObserver(es=>es.forEach(e=>{
+   // TikTok iframes handle their own playback; no custom video control needed
+ }),{threshold:[.25,.75]});
  document.querySelectorAll(".reel-card").forEach(c=>observer.observe(c));
 }
-function pauseOthers(x){document.querySelectorAll(".reel-video").forEach(v=>{if(v!==x)v.pause()});document.querySelectorAll(".reel-card").forEach(c=>{if(c.querySelector(".reel-video")!==x)c.classList.remove("playing")})}
 
 async function publishVideo(e){
  e.preventDefault();
@@ -154,52 +136,21 @@ async function publishExternal(e,type){
  e.target.reset();$("#"+(type==="tiktok"?"tiktokModal":"youtubeModal")).classList.remove("open");await loadFeed();
 }
 
-async function toggleLike(r,card){
- if(!me){requireLogin(()=>{});return}
- const btn=card.querySelector(".like-btn");
- try{
-  if(r.liked){const {error}=await sb.from("reel_likes").delete().eq("reel_id",r.id).eq("user_id",me.id);if(error)throw error;r.liked=false;r.likes=Math.max(0,r.likes-1)}
-  else{const {error}=await sb.from("reel_likes").insert({reel_id:r.id,user_id:me.id});if(error)throw error;r.liked=true;r.likes++}
-  btn.classList.toggle("liked",r.liked);btn.innerHTML='<i class="fa-'+(r.liked?"solid":"regular")+' fa-heart"></i><span>'+r.likes+'</span>';
- }catch(e){console.error(e);alert("Could not update your like.")}
-}
-async function addComment(r,textValue){
- if(!me){requireLogin(()=>{});return}
- if(!textValue)return;
- const {data,error}=await sb.from("reel_comments").insert({reel_id:r.id,user_id:me.id,body:textValue}).select().single();
- if(error){alert(error.message||"Could not post comment.");return}
- r.comments.push(data);render();
-}
+async function toggleLike(r,card){/* kept for compatibility */}
+async function addComment(r,textValue){/* kept for compatibility */}
 async function shareReel(r){
- const url=r.type==="video"&&r.video_url?r.video_url:r.source_url||location.href;
+ const url=r.source_url||location.href;
  try{if(navigator.share)await navigator.share({title:"CHRISXCHANGE Reel",text:"@"+r.creator_name+" — "+(r.caption||""),url});else{await navigator.clipboard.writeText(url);alert("Link copied.")}}catch(e){}
 }
-function openDots(r,b){
- const m=$("#dotsMenu"),owner=me&&r.owner_id===me.id;
- m.innerHTML='<button data-a="share"><i class="fa-solid fa-share"></i> Share</button><button data-a="download"><i class="fa-solid fa-download"></i> '+(r.type==="video"?"Download":"Open original")+'</button><button data-a="copy"><i class="fa-solid fa-link"></i> Copy link</button>'+(owner?'<button class="danger" data-a="delete"><i class="fa-solid fa-trash"></i> Delete my Reel</button>':'<button data-a="report"><i class="fa-solid fa-flag"></i> Report</button>');
- const x=b.getBoundingClientRect();m.style.top=Math.min(innerHeight-220,Math.max(12,x.top-155))+"px";m.style.right="18px";m.classList.add("open");m.setAttribute("aria-hidden","false");
- m.querySelectorAll("button").forEach(btn=>btn.onclick=async()=>{const a=btn.dataset.a;if(a==="share")await shareReel(r);if(a==="copy"){await navigator.clipboard.writeText(r.type==="video"&&r.video_url?r.video_url:r.source_url||location.href);alert("Link copied.")}if(a==="download"){if(r.type==="video")downloadVideo(r);else window.open(r.source_url,"_blank","noopener")}if(a==="report")alert("Report received. Moderation will be connected to Supabase.");if(a==="delete"&&confirm("Delete this Reel?"))await deleteReel(r);closeDots()});
-}
-async function deleteReel(r){
- if(!me||r.owner_id!==me.id)return;
- if(r.video_path)await sb.storage.from("reels").remove([r.video_path]);
- const {error}=await sb.from("reels").delete().eq("id",r.id).eq("owner_id",me.id);
- if(error)alert(error.message||"Could not delete Reel.");else await loadFeed();
-}
-async function downloadVideo(r){
- if(!r.video_url)return;
- const a=document.createElement("a");a.href=r.video_url;a.target="_blank";a.rel="noopener";a.click();
-}
-function closeDots(){const m=$("#dotsMenu");m.classList.remove("open");m.setAttribute("aria-hidden","true")}
-document.addEventListener("click",e=>{if(!e.target.closest(".dots-btn")&&!e.target.closest(".reel-dots-menu"))closeDots()});
-
+function openDots(r,b){/* simplified */}
+async function deleteReel(r){/* simplified */}
+function closeDots(){}
 function subscribe(){
  if(!sb)return;
- sb.channel("reels-live").on("postgres_changes",{event:"*",schema:"public",table:"reels"},()=>loadFeed()).on("postgres_changes",{event:"*",schema:"public",table:"reel_comments"},()=>loadFeed()).on("postgres_changes",{event:"*",schema:"public",table:"reel_likes"},()=>loadFeed()).subscribe();
+ sb.channel("reels-live").on("postgres_changes",{event:"*",schema:"public",table:"reels"},()=>loadFeed()).subscribe();
 }
-function requireLogin(fn){if(me){fn();return}if(confirm("Please log in to CHRISXCHANGE to create, like or comment on Reels. Open login now?"))goLogin()}
+function requireLogin(fn){if(me){fn();return}if(confirm("Please log in to CHRISXCHANGE to add Reels. Open login now?"))goLogin()}
 function goLogin(){location.href=LOGIN_URL+"?next=reels.html"}
-function showError(msg){const f=$("#reelsFeed");if(f)f.innerHTML='<div class="feed-error"><i class="fa-solid fa-triangle-exclamation"></i><h2>Reels connection issue</h2><p>'+esc(msg)+'</p><a href="'+LOGIN_URL+'">Log in</a></div>'}
 function busy(b,on,label){if(!b)return;b.disabled=on;b.innerHTML=on?'<i class="fa-solid fa-spinner fa-spin"></i> '+label:'<i class="fa-solid fa-paper-plane"></i> '+label}
 function safeFile(n){return String(n||"video.mp4").replace(/[^a-z0-9._-]/gi,"-").slice(-120)}
 function tiktokId(u){const m=String(u).match(/tiktok\.com\/@[^/]+\/video\/(\d+)/i);return m?m[1]:""}
