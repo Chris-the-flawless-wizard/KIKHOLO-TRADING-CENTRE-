@@ -13,7 +13,9 @@ function tiktokId(u){
 }
 
 function esc(v){
-  return String(v ?? "").replace(/[&<>"']/g, m => ({"&":"&","<":"<",">":">",'"':""","'":"&#039;"}[m]));
+  return String(v ?? "").replace(/[&<>"']/g, function(m){
+    return {"&":"&","<":"<",">":">",'"':""","'":"&#039;"}[m];
+  });
 }
 
 function renderTikToks(){
@@ -21,40 +23,24 @@ function renderTikToks(){
   const empty = document.getElementById("emptyReels");
   if (!feed) return;
   feed.innerHTML = "";
-  TIKTOK_POSTS.forEach((post, i) => {
+  TIKTOK_POSTS.forEach(function(post){
     const id = tiktokId(post.url);
     if (!id) return;
     const card = document.createElement("article");
     card.className = "reel-card";
-    card.innerHTML = `
-      <div class="reel-media embed-media">
-        <iframe class="tiktok-frame"
-          src="https://www.tiktok.com/player/v1/${id}?autoplay=1&loop=1&music_info=1&description=1&rel=0&controls=1"
-          title="TikTok video"
-          loading="lazy"
-          allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
-          allowfullscreen>
-        </iframe>
-      </div>
-      <div class="reel-bottom">
-        <div class="creator-line">
-          <span class="avatar tiktok-avatar"><i class="fa-brands fa-tiktok"></i></span>
-          <strong>@${esc(post.creator)}</strong>
-        </div>
-        <p>${esc(post.caption)}</p>
-      </div>
-      <div class="reel-discovery-link">
-        <a href="${esc(post.url)}" target="_blank" rel="noopener">Watch on TikTok <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-      </div>
-    `;
+    const iframeSrc = "https://www.tiktok.com/player/v1/" + id + "?autoplay=1&loop=1&music_info=1&description=1&rel=0&controls=1";
+    card.innerHTML = '<div class="reel-media embed-media">' +
+      '<iframe class="tiktok-frame" src="' + iframeSrc + '" title="TikTok video" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>' +
+      '</div>' +
+      '<div class="reel-bottom"><div class="creator-line"><span class="avatar tiktok-avatar"><i class="fa-brands fa-tiktok"></i></span><strong>@' + esc(post.creator) + '</strong></div><p>' + esc(post.caption) + '</p></div>' +
+      '<div class="reel-discovery-link"><a href="' + esc(post.url) + '" target="_blank" rel="noopener">Watch on TikTok <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div>';
     feed.appendChild(card);
   });
   if (empty) empty.style.display = feed.children.length ? "none" : "grid";
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function(){
   renderTikToks();
-  // Keep existing UI hooks if needed
   const openUpload = document.getElementById("openUpload");
-  if (openUpload) openUpload.addEventListener("click", () => alert("Log in to upload your own reels."));
+  if (openUpload) openUpload.addEventListener("click", function(){ alert("Log in to upload your own reels."); });
 });
