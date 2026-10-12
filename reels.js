@@ -18,10 +18,20 @@ let sb=null,me=null,reels=[],observer=null;
 
 document.addEventListener("DOMContentLoaded",async()=>{
   setupUI();
-  if(!window.supabase){showError("The Reels connection library could not load. Refresh and try again.");return}
+  // Always show discovery content first so the page never stays stuck on the loading spinner
+  reels=[];
+  render();
+  if(!window.supabase){
+    console.warn("Supabase library not loaded — showing discovery feed only");
+    return;
+  }
   sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-  const {data}=await sb.auth.getSession(); me=data?.session?.user||null;
-  await loadFeed();
+  try{
+    const {data}=await sb.auth.getSession();
+    me=data?.session?.user||null;
+  }catch(e){console.warn("Auth check failed",e)}
+  // Load user reels in background; discovery content is already visible
+  loadFeed().catch(e=>console.warn("Feed load failed",e));
   subscribe();
 });
 
@@ -44,9 +54,7 @@ function setupUI(){
 }
 
 async function loadFeed(){
- const feed=$("#reelsFeed"),empty=$("#emptyReels");
- if(!feed)return;
- feed.innerHTML='<div class="feed-loading"><i class="fa-solid fa-spinner fa-spin"></i><span>Loading CHRISXCHANGE Reels…</span></div>';
+ if(!sb)return;
  try{
   const {data,error}=await sb.from("reels").select("*").order("created_at",{ascending:false}).limit(100);
   if(error)throw error;
@@ -61,11 +69,7 @@ async function loadFeed(){
   reels=(data||[]).map(r=>({...r,comments:comments.filter(c=>c.reel_id===r.id),likes:likes.filter(l=>l.reel_id===r.id).length,liked:likes.some(l=>l.reel_id===r.id&&l.user_id===me?.id)}));
   render();
  }catch(e){
-  console.error(e);
-  // Keep the public discovery feed visible even when Supabase is temporarily unavailable.
-  // User-created Reels still require the database connection.
-  reels=[];
-  render();
+  console.warn("Could not load user reels — discovery feed remains visible",e);
  }
 }
 
@@ -190,6 +194,7 @@ function closeDots(){const m=$("#dotsMenu");m.classList.remove("open");m.setAttr
 document.addEventListener("click",e=>{if(!e.target.closest(".dots-btn")&&!e.target.closest(".reel-dots-menu"))closeDots()});
 
 function subscribe(){
+ if(!sb)return;
  sb.channel("reels-live").on("postgres_changes",{event:"*",schema:"public",table:"reels"},()=>loadFeed()).on("postgres_changes",{event:"*",schema:"public",table:"reel_comments"},()=>loadFeed()).on("postgres_changes",{event:"*",schema:"public",table:"reel_likes"},()=>loadFeed()).subscribe();
 }
 function requireLogin(fn){if(me){fn();return}if(confirm("Please log in to CHRISXCHANGE to create, like or comment on Reels. Open login now?"))goLogin()}
@@ -199,6 +204,6 @@ function busy(b,on,label){if(!b)return;b.disabled=on;b.innerHTML=on?'<i class="f
 function safeFile(n){return String(n||"video.mp4").replace(/[^a-z0-9._-]/gi,"-").slice(-120)}
 function tiktokId(u){const m=String(u).match(/tiktok\.com\/@[^/]+\/video\/(\d+)/i);return m?m[1]:""}
 function youtubeId(u){const m=String(u).match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/i);return m?m[1]:""}
-function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&","<":"<",">":">",'"':""","'":"&#039;"}[m]))}
 function attr(v){return esc(v)}
 function $(s){return document.querySelector(s)}
