@@ -29,3 +29,13 @@
  .category-filter{padding:8px 12px}
 }
 @media(max-width:360px){.product-grid{grid-template-columns:1fr}}
+
+.product-more{margin:0 18px 12px;text-align:left;font-size:.86rem;color:inherit}
+.product-more summary{cursor:pointer;color:#8cecff;font-weight:800;padding:7px 0}
+.product-more p{line-height:1.5;margin:6px 0;opacity:.82;overflow-wrap:anywhere}
+.product-actions .add-to-cart{width:100%;min-height:44px;background:linear-gradient(135deg,#ff3cac,#7c3aed,#4cc9f0);color:#fff;border:0;border-radius:12px;padding:11px 12px;font-weight:850;cursor:pointer;transition:transform .2s ease,filter .2s ease}
+.product-actions .add-to-cart:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.product-actions .add-to-cart.added{background:linear-gradient(135deg,#059669,#10b981)}
+.catalogue-header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.catalogue-header-actions .header-signup{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px}
+@media(max-width:640px){.product-more{margin:0 12px 10px}.catalogue-header-actions{gap:7px}.catalogue-header-actions .header-signup{padding:9px 10px;font-size:12px}}
