@@ -236,9 +236,9 @@ function render() {
             '<p class="product-seller"><i class="fa-solid fa-store"></i> Sold by ' + escapeHtml(p.seller || "Online seller") + '</p>' +
             '<p class="product-desc">' + escapeHtml(p.description || "Quality product from an online selling company.") + '</p>' +
             '<div class="product-price">' + money(p.price, p.currency) + '</div>' +
+            '<details class="product-more"><summary>Product details</summary><p>' + escapeHtml(p.description || "Contact the seller for more information.") + '</p><p class="product-seller">Seller: ' + escapeHtml(p.seller || "Online seller") + '</p></details>' +
             '<div class="product-actions">' +
-            '<a href="store-details.html?product=' + encodeURIComponent(p.name) + '&seller=' + encodeURIComponent(p.seller || '') + '">View</a>' +
-            '<button type="button" data-name="' + escapeHtml(p.name) + '" data-seller="' + escapeHtml(p.seller || '') + '">Contact</button>' +
+            '<button type="button" class="add-to-cart" data-name="' + escapeHtml(p.name) + '" data-seller="' + escapeHtml(p.seller || "") + '" data-price="' + Number(p.price || 0) + '" data-currency="' + escapeHtml(p.currency || "UGX") + '" data-image="' + escapeHtml(image) + '"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>' +
             '</div></div></article>';
     }).join("") : '<div class="empty-catalogue"><i class="fa-solid fa-box-open" style="font-size:2rem"></i><h2>No products found</h2><p>Try another search or category.</p></div>';
 
@@ -248,11 +248,35 @@ function render() {
             : "";
     }
 
-    grid.querySelectorAll(".product-actions button").forEach(btn => {
+    grid.querySelectorAll(".add-to-cart").forEach(btn => {
         btn.onclick = () => {
-            const name = btn.getAttribute("data-name");
-            const seller = btn.getAttribute("data-seller");
-            alert("Contact " + seller + " about: " + name);
+            const item = {
+                name: btn.dataset.name || "Marketplace product",
+                seller: btn.dataset.seller || "Online seller",
+                price: Number(btn.dataset.price) || 0,
+                currency: btn.dataset.currency || "UGX",
+                image_url: btn.dataset.image || "",
+                quantity: 1
+            };
+            let cart = [];
+            try {
+                const saved = JSON.parse(localStorage.getItem("chrisxchange-cart") || "[]");
+                cart = Array.isArray(saved) ? saved : [];
+            } catch (_) {
+                cart = [];
+            }
+            const existing = cart.find(entry => entry.name === item.name && entry.seller === item.seller);
+            if (existing) existing.quantity = Math.max(1, Number(existing.quantity) || 1) + 1;
+            else cart.push(item);
+            localStorage.setItem("chrisxchange-cart", JSON.stringify(cart));
+            const original = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Added to Cart';
+            btn.classList.add("added");
+            btn.setAttribute("aria-live", "polite");
+            window.setTimeout(() => {
+                btn.innerHTML = original;
+                btn.classList.remove("added");
+            }, 1400);
         };
     });
 }
