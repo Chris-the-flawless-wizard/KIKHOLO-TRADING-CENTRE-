@@ -179,24 +179,39 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     const images = document.querySelectorAll(".online-business-image");
     let cycle = 0;
-    function setImage(image, url, fallbackUrl) {
-        image.style.transition = "opacity 450ms ease";
-        image.style.opacity = "0.45";
-        image.onload = function () { image.style.opacity = "1"; };
-        image.onerror = function () {
-            if (this.dataset.fallbackUsed === "true") return;
-            this.dataset.fallbackUsed = "true";
-            this.src = fallbackUrl;
-        };
-        image.src = url;
+    function preloadImage(url, fallbackUrl) {
+        return new Promise((resolve) => {
+            const preview = new Image();
+            preview.onload = () => resolve(url);
+            preview.onerror = () => {
+                const fallback = new Image();
+                fallback.onload = () => resolve(fallbackUrl);
+                fallback.onerror = () => resolve(url);
+                fallback.src = fallbackUrl;
+            };
+            preview.src = url;
+        });
     }
-    function updateImages() {
-        images.forEach((image) => {
-            const category = image.dataset.category;
-            const set = imageSets[category];
-            if (!set) return;
-            image.dataset.fallbackUsed = "false";
-            setImage(image, set[cycle % set.length], set[(cycle + 1) % set.length]);
+    async function updateImages() {
+        const changes = Array.from(images).map(async (image) => {
+            const set = imageSets[image.dataset.category];
+            if (!set) return null;
+            const url = set[cycle % set.length];
+            const fallbackUrl = set[(cycle + 1) % set.length];
+            const readyUrl = await preloadImage(url, fallbackUrl);
+            return { image, url: readyUrl };
+        });
+        const readyImages = (await Promise.all(changes)).filter(Boolean);
+        // Swap every card together only after all next photos are ready.
+        readyImages.forEach(({ image }) => {
+            image.style.transition = "opacity 450ms ease";
+            image.style.opacity = "0.35";
+        });
+        requestAnimationFrame(() => {
+            readyImages.forEach(({ image, url }) => {
+                image.src = url;
+                image.style.opacity = "1";
+            });
         });
     }
     updateImages();
