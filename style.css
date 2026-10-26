@@ -25,6 +25,7 @@ transition:background .4s ease,color .4s ease;
    ============================== */
 
 body.light-mode{
+color-scheme:light;
 color:#172033;
 background:#ffffff;
 animation:none;
