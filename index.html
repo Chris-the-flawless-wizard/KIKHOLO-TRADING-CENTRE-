@@ -202,15 +202,20 @@ document.addEventListener("DOMContentLoaded", () => {
             return { image, url: readyUrl };
         });
         const readyImages = (await Promise.all(changes)).filter(Boolean);
-        // Swap every card together only after all next photos are ready.
+        // Change all photos together with a subtle cross-fade to avoid a noticeable flash.
         readyImages.forEach(({ image }) => {
-            image.style.transition = "opacity 450ms ease";
-            image.style.opacity = "0.35";
+            image.style.transition = "opacity 900ms ease-in-out";
+            image.style.opacity = "0.98";
         });
         requestAnimationFrame(() => {
             readyImages.forEach(({ image, url }) => {
+                image.style.opacity = "0.98";
                 image.src = url;
-                image.style.opacity = "1";
+            });
+            requestAnimationFrame(() => {
+                readyImages.forEach(({ image }) => {
+                    image.style.opacity = "1";
+                });
             });
         });
     }
