@@ -42,7 +42,7 @@ function toUGX(usd) {
 
 function escapeHtml(v) {
     return String(v ?? "").replace(/[&<>"']/g, m => ({
-        "&": "&",
+        "&": "&amp;",
         "<": "<",
         ">": ">",
         '"': "&quot;",
