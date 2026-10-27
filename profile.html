@@ -201,12 +201,28 @@ $("profileForm").onsubmit=async(event)=>{
   if(!name){setStatus("saveStatus","Enter a display name.",false);return;}
   setStatus("saveStatus","Saving...",true);
   const data={full_name:name,username:$("username").value.trim().replace(/^@/, ""),bio:$("bio").value.trim(),area:$("area").value.trim(),interest:$("interest").value,avatar_url:photoData||me.user_metadata?.avatar_url||""};
-  const updated=await sb.auth.updateUser({data});
-  if(updated.error){setStatus("saveStatus",updated.error.message,false);return;}
-  me=updated.data.user;
-  const row=await sb.from("chat_profiles").upsert({id:me.id,full_name:name,email:me.email,last_seen:new Date().toISOString()},{onConflict:"id"});
-  if(row.error){setStatus("saveStatus","Photo and details saved on your account. Chat name could not update: "+row.error.message,false);return;}
-  setStatus("saveStatus","Profile saved.",true);
+  try{
+    const updated=await sb.auth.updateUser({data});
+    if(updated.error) throw updated.error;
+    me=updated.data.user;
+
+    const profileRow=await sb.from("profiles").upsert({
+      id:me.id,
+      full_name:name,
+      avatar_url:photoData||null,
+      updated_at:new Date().toISOString()
+    },{onConflict:"id"});
+    if(profileRow.error) throw new Error("Account details updated, but the main profile could not sync: "+profileRow.error.message);
+
+    const chatRow=await sb.from("chat_profiles").upsert({
+      id:me.id,full_name:name,email:me.email,last_seen:new Date().toISOString()
+    },{onConflict:"id"});
+    if(chatRow.error) throw new Error("Profile saved, but the chat name could not sync: "+chatRow.error.message);
+
+    setStatus("saveStatus","Profile saved and synced to your account and chat profile.",true);
+  }catch(error){
+    setStatus("saveStatus",error?.message||"Could not save your profile. Please try again.",false);
+  }
 };
 $("signOut").onclick=async()=>{
   await sb.auth.signOut();
