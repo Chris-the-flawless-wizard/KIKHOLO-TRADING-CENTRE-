@@ -100,22 +100,39 @@ sb.auth.getSession().then(({data})=>{if(data.session)goProfile()});
 loginForm.addEventListener("submit",async e=>{
   e.preventDefault();
   const btn=document.getElementById("loginBtn");
+  const original=btn.textContent;
   btn.disabled=true;btn.textContent="Signing in...";
   message.style.color="#475569";message.textContent="Checking your account...";
   const email=document.getElementById("loginEmail").value.trim().toLowerCase();
   const password=document.getElementById("loginPassword").value;
-  const {data,error}=await sb.auth.signInWithPassword({email,password});
-  if(error||!data.session){btn.disabled=false;btn.textContent="Sign in and open profile";message.style.color="#dc2626";message.textContent=error?.message||"Login failed." ;return}
-  message.style.color="#15803d";message.textContent="Signed in. Opening your profile...";
-  goProfile();
+  try{
+    const {data,error}=await sb.auth.signInWithPassword({email,password});
+    if(error) throw error;
+    if(!data.session) throw new Error("Sign-in did not create a session. Please try again.");
+    message.style.color="#15803d";message.textContent="Signed in. Opening your profile...";
+    goProfile();
+  }catch(error){
+    message.style.color="#dc2626";
+    message.textContent=error?.message||"We could not sign you in. Check your connection and try again.";
+  }finally{
+    btn.disabled=false;btn.textContent=original;
+  }
 });
 document.getElementById("resetBtn").addEventListener("click",async()=>{
   const email=document.getElementById("loginEmail").value.trim().toLowerCase();
-  if(!email){message.style.color="#dc2626";message.textContent="Enter your email first.";return}
+  if(!email){message.style.color="#dc2626";message.textContent="Enter your email first.";document.getElementById("loginEmail").focus();return}
+  const btn=document.getElementById("resetBtn");
+  btn.disabled=true;
   message.style.color="#475569";message.textContent="Sending password reset email...";
-  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:new URL("../reset-password.html",location.href).href});
-  message.style.color=error?"#dc2626":"#15803d";
-  message.textContent=error?error.message:"If this account exists, check your email for the reset link.";
+  try{
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:new URL("../reset-password.html",location.href).href});
+    if(error) throw error;
+    message.style.color="#15803d";
+    message.textContent="If this account exists, a password-reset link will be sent. Check your inbox and spam folder.";
+  }catch(error){
+    message.style.color="#dc2626";
+    message.textContent=error?.message||"Could not send the reset email. Please try again.";
+  }finally{btn.disabled=false}
 });
 createForm.addEventListener("submit",async e=>{
   e.preventDefault();
@@ -124,16 +141,37 @@ createForm.addEventListener("submit",async e=>{
   const password=document.getElementById("password").value;
   const confirm=document.getElementById("confirm").value;
   const btn=document.getElementById("createBtn");
+  if(!name){message.style.color="#dc2626";message.textContent="Enter your display name.";return}
+  if(password.length<6){message.style.color="#dc2626";message.textContent="Use a password with at least 6 characters.";return}
   if(password!==confirm){message.style.color="#dc2626";message.textContent="Passwords do not match.";return}
+  const original=btn.textContent;
   btn.disabled=true;btn.textContent="Creating account...";
   message.style.color="#475569";message.textContent="Creating your account...";
-  const invitedBy=new URLSearchParams(location.search).get("inviter")||"";if(invitedBy)localStorage.setItem("cx_pending_inviter",invitedBy);const {data,error}=await sb.auth.signUp({email,password,options:{data:{full_name:name,invited_by:invitedBy},emailRedirectTo:new URL("../profile.html",location.href).href}});
-  if(error){btn.disabled=false;btn.textContent="Create account and open profile";message.style.color="#dc2626";message.textContent=error.message;return}
-  let session=data.session;
-  if(!session){const signed=await sb.auth.signInWithPassword({email,password});session=signed.data?.session||null}
-  if(session){if(invitedBy&&invitedBy!==session.user.id){await sb.from("friend_requests").insert({sender_id:session.user.id,receiver_id:invitedBy})}message.style.color="#15803d";message.textContent="Account created. Opening your profile page...";goProfile();return}
-  message.style.color="#15803d";message.textContent="Account created. Confirm your email, then open your profile page to edit your photo and details.";
-  btn.disabled=false;btn.textContent="Create account and open profile";
+  const invitedBy=new URLSearchParams(location.search).get("inviter")||"";
+  try{
+    if(invitedBy)localStorage.setItem("cx_pending_inviter",invitedBy);
+    const {data,error}=await sb.auth.signUp({
+      email,password,
+      options:{data:{full_name:name,invited_by:invitedBy},emailRedirectTo:new URL("../profile.html",location.href).href}
+    });
+    if(error) throw error;
+    if(data.session){
+      if(invitedBy&&invitedBy!==data.user?.id){
+        const request=await sb.from("friend_requests").insert({sender_id:data.user.id,receiver_id:invitedBy});
+        if(request.error) console.warn("Account created, but the invitation could not be sent:",request.error.message);
+      }
+      message.style.color="#15803d";message.textContent="Account created. Opening your profile...";
+      goProfile();
+      return;
+    }
+    message.style.color="#15803d";
+    message.textContent="If this is a new account, check your email (including spam) and confirm it before signing in. If you already have an account, use Sign in.";
+    btn.disabled=false;btn.textContent=original;
+  }catch(error){
+    message.style.color="#dc2626";
+    message.textContent=error?.message||"Account creation failed. Check your connection and try again.";
+    btn.disabled=false;btn.textContent=original;
+  }
 });
 </script>
 </body>
